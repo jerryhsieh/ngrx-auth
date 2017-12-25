@@ -9,7 +9,10 @@
   width: 350px;
   
 }
-
 .title {
   text-align: center;
+}
+.btn-center {
+  display: flex;
+  justify-content: center;
 }
