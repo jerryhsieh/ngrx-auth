@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { UserService } from '../service/user.service';
@@ -11,7 +12,10 @@ import { UserService } from '../service/user.service';
 export class LoginComponent implements OnInit {
 
     public form: FormGroup;
-    constructor(private fb: FormBuilder,
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private fb: FormBuilder,
         private userService: UserService) { }
 
     ngOnInit() {
@@ -28,7 +32,9 @@ export class LoginComponent implements OnInit {
         console.log(this.form.value);
         this.userService.login(this.form.value)
             .subscribe(res => {
-                console.log('login ', res);
+                if (res) {
+                    this.router.navigate(['/users/member']);
+                }
             })
     }
 }

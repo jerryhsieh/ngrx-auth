@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { UsersRoutingModule } from './users-routing.module';
 import { LoginComponent } from './login/login.component';
 
-import { UserService } from './service/user.user.service';
+import { UserService } from './service/user.service';
+import { MemberComponent } from './member/member.component';
+
 
 @NgModule({
     imports: [
@@ -17,11 +20,12 @@ import { UserService } from './service/user.user.service';
         MatFormFieldModule,
         MatInputModule,
         MatCardModule,
-        MatButtonModule
+        MatButtonModule,
+        HttpClientModule
     ],
     providers: [
         UserService
     ],
-    declarations: [LoginComponent]
+    declarations: [LoginComponent, MemberComponent]
 })
 export class UsersModule { }
