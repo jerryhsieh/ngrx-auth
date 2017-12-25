@@ -7,6 +7,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UsersRoutingModule } from './users-routing.module';
 import { LoginComponent } from './login/login.component';
 
+import { UserService } from './service/user.user.service';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -16,6 +18,9 @@ import { LoginComponent } from './login/login.component';
         MatInputModule,
         MatCardModule,
         MatButtonModule
+    ],
+    providers: [
+        UserService
     ],
     declarations: [LoginComponent]
 })
