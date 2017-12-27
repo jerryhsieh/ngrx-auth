@@ -1,3 +1,11 @@
+//
+//
+// File name : user.service.ts
+// Created by: Jerry Hsieh @ 2017-12-25
+//
+// Copyright (C) 2017 by Jerry Hsieh. All rights reserved
+//
+
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -8,21 +16,27 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 
+import { UtilsService, TOKEN } from '../../helper/utils.service';
+
 interface Response {
     success: boolean;
+    token?: string;
 }
 
 @Injectable()
 export class UserService {
     loginStatus = new BehaviorSubject(false);
     apiUrl: string = 'http://localhost:3000/api';
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient,
+        private utils: UtilsService) { }
 
     login(loginData): Observable<boolean> {
         return this.http.post(this.apiUrl + '/users/authenticate', { username: loginData.username, password: loginData.password })
             .map((res: Response) => {
                 if (res.success) {
                     this.loginStatus.next(true);
+                    this.utils.writeToken(TOKEN, res.token);
+                    console.log('got token', res.token);
                     return true;
                 } else {
                     console.log('can not login');
@@ -39,8 +53,24 @@ export class UserService {
             })
     }
 
+    logout() {
+        this.loginStatus.next(false);
+        this.utils.removeToken(TOKEN);
+    }
+
     getLoginStatus(): BehaviorSubject<boolean> {
         return this.loginStatus;
     }
 
+    // when startup
+    checkUser(): Observable<boolean> {
+        if (!this.utils.isTokenExpired(TOKEN)) {
+            this.loginStatus.next(true);
+            return Observable.of(true);
+        } else {
+            console.log('no token or token is expired');
+            this.utils.removeToken(TOKEN);
+            return Observable.of(false);
+        }
+    }
 }

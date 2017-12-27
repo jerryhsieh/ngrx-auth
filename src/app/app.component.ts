@@ -1,3 +1,11 @@
+//
+//
+// File name : app.component.ts
+// Created by: Jerry Hsieh @ 2017-12-26
+//
+// Copyright (C) 2017 by Jerry Hsieh. All rights reserved
+//
+
 import { Component } from '@angular/core';
 import { NavbarComponent } from './navbar/navbar.component';
 

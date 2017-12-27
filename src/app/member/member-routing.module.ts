@@ -1,23 +1,25 @@
 //
 //
-// File name : users-routing.module.ts
+// File name : member-routing.module.ts
 // Created by: Jerry Hsieh @ 2017-12-26
 //
 // Copyright (C) 2017 by Jerry Hsieh. All rights reserved
 //
+
+
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { LoginComponent } from './login/login.component';
-
+import { MemberComponent } from './member/member.component';
+import { MembarComponent } from './membar/membar.component';
 
 const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: '', pathMatch: 'full', redirectTo: 'login' }
+    { path: '', component: MemberComponent }
+
 ];
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class UsersRoutingModule { }
+export class MemberRoutingModule { }

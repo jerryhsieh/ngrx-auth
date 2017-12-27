@@ -1,18 +1,19 @@
 //
 //
-// File name : home.component.ts
+// File name : membar.component.ts
 // Created by: Jerry Hsieh @ 2017-12-26
 //
 // Copyright (C) 2017 by Jerry Hsieh. All rights reserved
 //
+
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+    selector: 'app-membar',
+    templateUrl: './membar.component.html',
+    styleUrls: ['./membar.component.css']
 })
-export class HomeComponent implements OnInit {
+export class MembarComponent implements OnInit {
 
     constructor() { }
 

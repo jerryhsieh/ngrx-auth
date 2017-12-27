@@ -1,3 +1,10 @@
+//
+//
+// File name : login.component.ts
+// Created by: Jerry Hsieh @ 2017-12-26
+//
+// Copyright (C) 2017 by Jerry Hsieh. All rights reserved
+//
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -33,7 +40,7 @@ export class LoginComponent implements OnInit {
         this.userService.login(this.form.value)
             .subscribe(res => {
                 if (res) {
-                    this.router.navigate(['/users/member']);
+                    this.router.navigate(['/member']);
                 }
             })
     }

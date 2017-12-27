@@ -1,3 +1,11 @@
+//
+//
+// File name : users.module.ts
+// Created by: Jerry Hsieh @ 2017-12-26
+//
+// Copyright (C) 2017 by Jerry Hsieh. All rights reserved
+//
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -7,9 +15,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { UsersRoutingModule } from './users-routing.module';
 import { LoginComponent } from './login/login.component';
-
-import { UserService } from './service/user.service';
-import { MemberComponent } from './member/member.component';
 
 
 @NgModule({
@@ -21,11 +26,14 @@ import { MemberComponent } from './member/member.component';
         MatInputModule,
         MatCardModule,
         MatButtonModule,
-        HttpClientModule
+        HttpClientModule,
+
     ],
     providers: [
-        UserService
+
     ],
-    declarations: [LoginComponent, MemberComponent]
+    declarations: [
+        LoginComponent
+    ]
 })
 export class UsersModule { }
