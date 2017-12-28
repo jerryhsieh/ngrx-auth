@@ -9,7 +9,6 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -27,7 +26,8 @@ interface Response {
 export class UserService {
     loginStatus = new BehaviorSubject(false);
     apiUrl: string = 'http://localhost:3000/api';
-    constructor(private http: HttpClient,
+    constructor(
+        private http: HttpClient,
         private utils: UtilsService) { }
 
     login(loginData): Observable<boolean> {
@@ -37,7 +37,9 @@ export class UserService {
             .map((res: Response) => {
                 if (res.success) {
                     this.loginStatus.next(true);
-                    this.utils.writeToken(TOKEN, res.token);
+                    if (loginData.remember) {
+                        this.utils.writeToken(TOKEN, res.token);
+                    }
                     console.log('got token', res.token);
                     return true;
                 } else {

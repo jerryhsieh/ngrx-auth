@@ -5,6 +5,7 @@
   <span class="to-right"></span>
   <a mat-button *ngIf="!(login$ | async)" routerLink="/users/login">會員登入</a>
   <a mat-button *ngIf="login$ | async" routerLink="/member">會員中心</a>
+  <button  mat-button *ngIf="login$ | async" (click)="logout()" >會員登出</button>
 </mat-toolbar>
 
 

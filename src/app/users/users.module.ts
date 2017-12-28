@@ -9,7 +9,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatCheckboxModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -26,6 +26,7 @@ import { LoginComponent } from './login/login.component';
         MatInputModule,
         MatCardModule,
         MatButtonModule,
+        MatCheckboxModule,
         HttpClientModule,
 
     ],

@@ -8,6 +8,7 @@
 
 
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -22,10 +23,16 @@ import 'rxjs/add/observable/interval';
 export class NavbarComponent implements OnInit {
 
     login$: BehaviorSubject<boolean>;
-    constructor(private userService: UserService) { }
+    constructor(
+        private userService: UserService,
+        private router: Router) { }
 
     ngOnInit() {
         this.login$ = this.userService.getLoginStatus()
     }
 
+    logout() {
+        this.userService.logout();
+        this.router.navigate(['/']);
+    }
 }
