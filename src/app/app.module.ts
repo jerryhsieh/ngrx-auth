@@ -23,10 +23,17 @@ import { AuthGuard } from './services/auth.guard';
 import { UserService } from './users/service/user.service';
 
 import { UtilsService } from './helper/utils.service';
-import { JwtModule } from '@auth0/angular-jwt';
+import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { StartupService } from './services/startup.service';
 
 export function startupServiceFactory(startupService: StartupService): Function { return () => startupService.load(); }
+
+export function jwtOptionsFactory() {
+    return {
+        tokenGetter: () => localStorage.getItem('token'),
+        whitelistedDomains: ['localhost:3000']
+    }
+}
 
 @NgModule({
     declarations: [
@@ -47,11 +54,9 @@ export function startupServiceFactory(startupService: StartupService): Function 
         FlexLayoutModule,
         HttpClientModule,
         JwtModule.forRoot({
-            config: {
-                tokenGetter: () => {
-                    return localStorage.getItem('access_token');
-                },
-                whitelistedDomains: ['localhost:3000']
+            jwtOptionsProvider: {
+                provide: JWT_OPTIONS,
+                useFactory: jwtOptionsFactory
             }
         })
 

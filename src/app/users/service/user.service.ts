@@ -31,6 +31,8 @@ export class UserService {
         private utils: UtilsService) { }
 
     login(loginData): Observable<boolean> {
+        let username = loginData.username.trim();
+        let password = loginData.password.trim();
         return this.http.post(this.apiUrl + '/users/authenticate', { username: loginData.username, password: loginData.password })
             .map((res: Response) => {
                 if (res.success) {
