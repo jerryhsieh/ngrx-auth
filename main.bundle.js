@@ -164,7 +164,8 @@ var AppComponent = (function () {
 //
 var AppConfig = (function () {
     function AppConfig() {
-        this.apiUrl = "http://localhost:3000/api";
+        //public readonly apiUrl = "http://localhost:3000/api";
+        this.apiUrl = "https://demo.onionstudio.com.tw/api";
     }
     return AppConfig;
 }());
