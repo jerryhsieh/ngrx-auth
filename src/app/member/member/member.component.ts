@@ -39,7 +39,6 @@ export class MemberComponent implements OnInit {
     }
 
     onClick(report) {
-        console.log('click report', report);
-        this.router.navigate(['/member/report/', 1]);
+        this.router.navigate(['/member/report/', report.id]);
     }
 }

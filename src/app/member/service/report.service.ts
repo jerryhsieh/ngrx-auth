@@ -21,7 +21,9 @@ export class ReportService {
     constructor(
         private appConfig: AppConfig,
         private http: HttpClient
-    ) { }
+    ) {
+        this.getReports();
+    }
 
 
     getReportsFromServer(): Observable<Report[]> {
@@ -38,6 +40,10 @@ export class ReportService {
         } else {
             return Observable.of(this.reports);
         }
+    }
+
+    getReport(id: number): Report {
+        return this.reports.filter(rpt => rpt.id === id)[0];
     }
 
 }
