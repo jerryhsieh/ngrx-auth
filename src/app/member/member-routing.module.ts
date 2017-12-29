@@ -11,7 +11,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { MemberComponent } from './member/member.component';
-import { MembarComponent } from './membar/membar.component';
+
 
 const routes: Routes = [
     { path: '', component: MemberComponent }

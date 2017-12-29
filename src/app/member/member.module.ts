@@ -7,22 +7,20 @@
 //
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatSidenavModule, MatToolbarModule, MatButtonModule, MatListModule, MatIconModule } from '@angular/material';
+import { ShareModule } from '../share.module';
 
 import { MemberRoutingModule } from './member-routing.module';
 import { MemberComponent } from './member/member.component';
-import { MembarComponent } from './membar/membar.component';
+
+import { ReportService } from './service/report.service';
 
 @NgModule({
     imports: [
         CommonModule,
         MemberRoutingModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatListModule,
-        MatIconModule
+        ShareModule
     ],
-    declarations: [MemberComponent, MembarComponent]
+    declarations: [MemberComponent],
+    providers: [ReportService]
 })
 export class MemberModule { }

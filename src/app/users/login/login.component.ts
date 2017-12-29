@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
     }
     get username() { return this.form.get('username'); }
     get password() { return this.form.get('password'); }
+    get rememberMe() { return this.form.get('rememberMe') }
 
     login() {
         console.log(this.form.value);

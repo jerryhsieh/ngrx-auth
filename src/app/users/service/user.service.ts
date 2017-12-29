@@ -16,6 +16,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 
 import { UtilsService, TOKEN } from '../../helper/utils.service';
+import { AppConfig } from '../../app.config';
 
 interface Response {
     success: boolean;
@@ -25,19 +26,21 @@ interface Response {
 @Injectable()
 export class UserService {
     loginStatus = new BehaviorSubject(false);
-    apiUrl: string = 'http://localhost:3000/api';
+
     constructor(
         private http: HttpClient,
+        private appConfig: AppConfig,
         private utils: UtilsService) { }
 
     login(loginData): Observable<boolean> {
         let username = loginData.username.trim();
         let password = loginData.password.trim();
-        return this.http.post(this.apiUrl + '/users/authenticate', { username: loginData.username, password: loginData.password })
+        return this.http.post(this.appConfig.apiUrl + '/users/authenticate', { username: loginData.username, password: loginData.password })
             .map((res: Response) => {
                 if (res.success) {
                     this.loginStatus.next(true);
-                    if (loginData.remember) {
+                    console.log('check rememberMe', loginData.rememberMe);
+                    if (loginData.rememberMe) {
                         this.utils.writeToken(TOKEN, res.token);
                     }
                     console.log('got token', res.token);

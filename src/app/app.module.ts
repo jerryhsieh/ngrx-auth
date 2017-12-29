@@ -10,8 +10,6 @@ import { NgModule, APP_INITIALIZER, Injector } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
-import { MatSidenavModule, MatToolbarModule, MatButtonModule, MatListModule, MatIconModule } from '@angular/material';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -21,16 +19,20 @@ import { PageNotFoundComponent } from './not-found.component';
 
 import { AuthGuard } from './services/auth.guard';
 import { UserService } from './users/service/user.service';
+import { ShareModule } from './share.module';
+import { AppConfig } from './app.config';
 
-import { UtilsService } from './helper/utils.service';
-import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { UtilsService, TOKEN } from './helper/utils.service';
+import { JwtModule, JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { StartupService } from './services/startup.service';
 
 export function startupServiceFactory(startupService: StartupService): Function { return () => startupService.load(); }
 
 export function jwtOptionsFactory() {
     return {
-        tokenGetter: () => localStorage.getItem('token'),
+        tokenGetter: () => {
+            return localStorage.getItem('access_token');
+        },
         whitelistedDomains: ['localhost:3000']
     }
 }
@@ -46,13 +48,8 @@ export function jwtOptionsFactory() {
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatListModule,
-        MatIconModule,
-        FlexLayoutModule,
         HttpClientModule,
+        ShareModule,
         JwtModule.forRoot({
             jwtOptionsProvider: {
                 provide: JWT_OPTIONS,
@@ -65,6 +62,7 @@ export function jwtOptionsFactory() {
         AuthGuard,
         UserService,
         UtilsService,
+        AppConfig,
         StartupService,
         {
             provide: APP_INITIALIZER,

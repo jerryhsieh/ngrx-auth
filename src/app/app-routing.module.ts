@@ -10,7 +10,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component'
 import { NavbarComponent } from './navbar/navbar.component';
 import { PageNotFoundComponent } from './not-found.component';
-import { MembarComponent } from './member/membar/membar.component';
+
 
 import { AuthGuard } from './services/auth.guard';
 

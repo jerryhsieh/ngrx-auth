@@ -8,6 +8,9 @@
 
 import { Component, OnInit } from '@angular/core';
 
+import { Report } from '../model/report';
+import { ReportService } from '../service/report.service';
+
 @Component({
     selector: 'app-member',
     templateUrl: './member.component.html',
@@ -15,9 +18,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MemberComponent implements OnInit {
 
-    constructor() { }
+    loading: boolean = false;
+    reports: Report[];
+    constructor(private reportService: ReportService) { }
 
     ngOnInit() {
+        this.loading = true;
+        this.reportService.getReports()
+            .subscribe(res => {
+                this.reports = res;
+                console.log(res);
+                this.loading = false;
+            }, err => {
+                console.log(err);
+            })
     }
 
+    onClick(report) {
+        console.log('click report', report);
+    }
 }
