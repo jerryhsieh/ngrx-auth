@@ -11,11 +11,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { MemberComponent } from './member/member.component';
-
+import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
-    { path: '', component: MemberComponent }
-
+    { path: '', component: MemberComponent },
+    { path: 'report/:id', component: ReportComponent }
 ];
 
 @NgModule({

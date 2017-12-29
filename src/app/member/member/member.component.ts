@@ -7,6 +7,7 @@
 //
 
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Report } from '../model/report';
 import { ReportService } from '../service/report.service';
@@ -20,7 +21,10 @@ export class MemberComponent implements OnInit {
 
     loading: boolean = false;
     reports: Report[];
-    constructor(private reportService: ReportService) { }
+    constructor(
+        private reportService: ReportService,
+        private router: Router
+    ) { }
 
     ngOnInit() {
         this.loading = true;
@@ -36,5 +40,6 @@ export class MemberComponent implements OnInit {
 
     onClick(report) {
         console.log('click report', report);
+        this.router.navigate(['/member/report/', 1]);
     }
 }
