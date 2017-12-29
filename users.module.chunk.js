@@ -8,7 +8,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "\n.container {\n  margin: 2em;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n}\n\n.login-card {\n  width: 350px;\n  \n}\n.title {\n  text-align: center;\n}\n.btn-center {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n}\n", ""]);
+exports.push([module.i, "\n.container {\n  height: 400px;\n  background: url(https://images.pexels.com/photos/731658/pexels-photo-731658.jpeg?w=940&h=650&auto=compress&cs=tinysrgb) no-repeat center bottom;\n  background-position: cover;\n  background-size: cover;\n  position: relative;\n  overflow: hidden;\n}\n\n.container:before {\n    content: \"\";\n    display: block;\n    width: 100%;\n    background-color: rgba(0, 0, 0, .5);\n    height: 100vh;\n}\n\n.login-card {\n  max-width: 350px;\n  position: absolute;\n  top: 10%;\n  left: 50%;\n  -webkit-transform: translateX(-50%);\n          transform: translateX(-50%);  \n}\n.title {\n  text-align: center;\n}\n\n.btn-center {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n}\n", ""]);
 
 // exports
 
@@ -21,7 +21,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/users/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"container\">\n  <mat-card fxFlex class=\"login-card\">\n    <mat-card-title class=\"title\">登入</mat-card-title>\n    <form [formGroup]=\"form\" (ngSubmit)=\"login()\" novalidate>            \n      <mat-card-content>\n        <mat-form-field>\n          <input matInput placeholder=\"使用者名稱\" formControlName=\"username\" required>\n          <div *ngIf=\"username.invalid && (username.dirty && username.touched)\">\n            <mat-error *ngIf=\"username.errors.required\">請輸入使用者名稱</mat-error>\n            <mat-error *ngIf=\"username.errors.pattern\">請輸入至少五個字母，數字</mat-error>            \n          </div>\n        </mat-form-field>\n        \n        <mat-form-field>\n          <input matInput type=\"password\" placeholder=\"密碼\" formControlName=\"password\" required>\n          <div *ngIf=\"password.invalid && (password.dirty && password.touched)\">\n            <mat-error *ngIf=\"password.errors.required\">請輸入密碼</mat-error>\n            <mat-error *ngIf=\"password.errors.pattern\">請輸入至少五個字母，數字</mat-error>                        \n          </div>          \n        </mat-form-field>\n      </mat-card-content>\n\n      <mat-card-actions class=\"btn-center\">\n        <button mat-raised-button type=\"submit\" [disabled]=\"!form.valid\">登入</button>\n        <button mat-raised-button type=\"cancel\">取消</button>                      \n      </mat-card-actions>\n    </form>                  \n  </mat-card>\n</div>\n"
+module.exports = "\n<div class=\"container\">\n  <mat-card fxFlex class=\"login-card\">\n    <mat-card-title class=\"title\">登入</mat-card-title>\n    <form [formGroup]=\"form\" (ngSubmit)=\"login()\" novalidate>            \n      <mat-card-content>\n        <mat-form-field>\n          <input matInput placeholder=\"使用者名稱\" formControlName=\"username\" required>\n          <div *ngIf=\"username.invalid && (username.dirty && username.touched)\">\n            <mat-error *ngIf=\"username.errors.required\">請輸入使用者名稱</mat-error>\n            <mat-error *ngIf=\"username.errors.pattern\">請輸入至少五個字母，數字</mat-error>            \n          </div>\n        </mat-form-field>\n        \n        <mat-form-field>\n          <input matInput type=\"password\" placeholder=\"密碼\" formControlName=\"password\" required>\n          <div *ngIf=\"password.invalid && (password.dirty && password.touched)\">\n            <mat-error *ngIf=\"password.errors.required\">請輸入密碼</mat-error>\n            <mat-error *ngIf=\"password.errors.pattern\">請輸入至少五個字母，數字</mat-error>                        \n          </div>          \n        </mat-form-field>\n\n        <div>\n          <mat-checkbox formControlName=\"rememberMe\" class=\"chk\">記得我</mat-checkbox>\n        </div>\n        \n      </mat-card-content>\n\n      <mat-card-actions class=\"btn-center\">\n        <button mat-raised-button type=\"submit\" [disabled]=\"!form.valid\">登入</button>\n        <button mat-raised-button type=\"cancel\">取消</button>                      \n      </mat-card-actions>\n    </form>                  \n  </mat-card>\n</div>\n"
 
 /***/ }),
 
@@ -65,6 +65,7 @@ var LoginComponent = (function () {
         this.form = this.fb.group({
             username: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["i" /* Validators */].pattern('^[a-zA-Z0-9-_]{5,20}')],
             password: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["i" /* Validators */].pattern('^[a-zA-Z0-9-_]{5,20}')],
+            rememberMe: [true]
         });
     };
     Object.defineProperty(LoginComponent.prototype, "username", {
@@ -74,6 +75,11 @@ var LoginComponent = (function () {
     });
     Object.defineProperty(LoginComponent.prototype, "password", {
         get: function () { return this.form.get('password'); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LoginComponent.prototype, "rememberMe", {
+        get: function () { return this.form.get('rememberMe'); },
         enumerable: true,
         configurable: true
     });
@@ -157,7 +163,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UsersModule", function() { return UsersModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__share_module__ = __webpack_require__("../../../../../src/app/share.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__users_routing_module__ = __webpack_require__("../../../../../src/app/users/users-routing.module.ts");
@@ -191,11 +197,8 @@ var UsersModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
                 __WEBPACK_IMPORTED_MODULE_5__users_routing_module__["a" /* UsersRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_3__angular_forms__["h" /* ReactiveFormsModule */],
-                __WEBPACK_IMPORTED_MODULE_2__angular_material__["c" /* MatFormFieldModule */],
-                __WEBPACK_IMPORTED_MODULE_2__angular_material__["e" /* MatInputModule */],
-                __WEBPACK_IMPORTED_MODULE_2__angular_material__["b" /* MatCardModule */],
-                __WEBPACK_IMPORTED_MODULE_2__angular_material__["a" /* MatButtonModule */],
                 __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["c" /* HttpClientModule */],
+                __WEBPACK_IMPORTED_MODULE_2__share_module__["a" /* ShareModule */]
             ],
             providers: [],
             declarations: [
