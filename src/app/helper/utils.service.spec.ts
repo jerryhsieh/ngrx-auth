@@ -2,40 +2,49 @@ import { TestBed, inject } from '@angular/core/testing';
 import { JwtModule, JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { UtilsService } from './utils.service';
 
-export function jwtOptionsFactory() {
-    return {
-        tokenGetter: () => {
-            return localStorage.getItem('access_token');
-        },
-        whitelistedDomains: ['localhost:3000']
-    }
-}
-
 describe('UtilsService', () => {
     let service: UtilsService;
+    let jwt: JwtHelperService;
     let token = 'test_token';
     let value = 'test value';
 
     beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                JwtModule.forRoot({
-                    jwtOptionsProvider: {
-                        provide: JWT_OPTIONS,
-                        useFactory: jwtOptionsFactory
-                    }
-                })
-            ],
-            providers: [UtilsService]
-        });
-    });
+        jwt = new JwtHelperService({});
+        service = new UtilsService(jwt);
+    })
 
-    it('should be created', inject([UtilsService], (service: UtilsService) => {
+    afterEach(() => {
+        jwt = null;
+        service = null;
+        localStorage.removeItem(token);
+    })
+
+
+    it('should be created', () => {
         expect(service).toBeTruthy();
+    })
+
+    it('should get token', (() => {
+        service.writeToken(token, value);
+        expect(service.getToken(token)).toBe(value);
     }));
 
-    it('should write token', inject([UtilsService], (service: UtilsService) => {
-
-        //expect(service.writeToken(token, value)).
+    it('should not get token', (() => {
+        expect(service.getToken(token)).toBeNull();
     }));
+
+
+    it('should be expired', (() => {
+        let jwtStr = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplcnJ5IiwiaWF0IjoxNTE0NzE5NDE0LCJleHAiOjE1MTQ3MjMwMTR9.NdZrn-DxzmgvlmefXZGse_OvBh1dhTS5WZQnuBhOX3o";
+        service.writeToken(token, jwtStr);
+        expect(service.isTokenExpired()).toBeTruthy();   // still not expired yet
+    }));
+
+    it('check expired', (() => {
+        let jwtStr = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplcnJ5IiwiaWF0IjoxNTE0NzE5NDE0LCJleHAiOjE1MTQ3MjMwMTR9.NdZrn-DxzmgvlmefXZGse_OvBh1dhTS5WZQnuBhOX3o";
+        let date = jwt.getTokenExpirationDate(jwtStr);
+        expect(jwt.getTokenExpirationDate(jwtStr)).toMatch(/Sun Dec 31 2017/);   // should be 2017-12-31
+    }));
+
+
 });

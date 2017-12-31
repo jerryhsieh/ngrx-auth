@@ -14,7 +14,7 @@ import { PageNotFoundComponent } from './not-found.component';
 
 import { AuthGuard } from './services/auth.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
     {
         path: '', children: [
             { path: 'users', loadChildren: './users/users.module#UsersModule' },         // lazy loading
