@@ -5,18 +5,34 @@ import { MatCardModule, MatInputModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ShareModule } from '../../share.module';
+import { Router } from '@angular/router';
+import { UserService } from '../service/user.service';
+import { Observable } from 'rxjs/Observable';
+
 describe('LoginComponent', () => {
     let component: LoginComponent;
     let fixture: ComponentFixture<LoginComponent>;
 
+    class RouterStub {
+        navigateByUrl(url: string) { return url; }
+    }
+    class UserServiceStub {
+        getLoginStatus = jasmine.createSpy('getLoginStatus')
+            .and.returnValue(Observable.of(true));
+
+        logout = jasmine.createSpy('logout')
+            .and.returnValue(true);
+    }
+
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [LoginComponent],
-            imports: [
-                MatCardModule,
-                MatInputModule,
-                ReactiveFormsModule,
-                BrowserAnimationsModule
+            imports: [ShareModule, BrowserAnimationsModule],
+            providers: [
+                { provide: UserService, useClass: UserServiceStub },
+                { provide: Router, useClass: RouterStub },
             ]
         })
             .compileComponents();

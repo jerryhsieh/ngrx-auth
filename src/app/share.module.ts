@@ -10,6 +10,8 @@ import { NgModule } from '@angular/core';
 import { MatSidenavModule, MatToolbarModule, MatButtonModule, MatListModule, MatIconModule } from '@angular/material';
 import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatCardModule, MatProgressSpinnerModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
     imports: [
@@ -23,7 +25,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         MatCardModule,
         MatInputModule,
         MatProgressSpinnerModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        ReactiveFormsModule
     ],
     exports: [
         MatSidenavModule,
@@ -36,7 +39,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         MatCheckboxModule,
         MatInputModule,
         MatProgressSpinnerModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        ReactiveFormsModule
     ]
 })
 
