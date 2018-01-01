@@ -20,12 +20,13 @@ import { AppConfig } from '../../app.config';
 
 interface Response {
     success: boolean;
-    token?: string;
+    payload?: string;
 }
 
 @Injectable()
 export class UserService {
     loginStatus = new BehaviorSubject(false);
+    currentUser = new BehaviorSubject(null);
 
     constructor(
         private http: HttpClient,
@@ -39,11 +40,10 @@ export class UserService {
             .map((res: Response) => {
                 if (res.success) {
                     this.loginStatus.next(true);
-                    console.log('check rememberMe', loginData.rememberMe);
                     if (loginData.rememberMe) {
-                        this.utils.writeToken(TOKEN, res.token);
+                        this.utils.writeToken(TOKEN, res.payload);
                     }
-                    console.log('got token', res.token);
+                    this.currentUser.next(username);          // initial current user
                     return true;
                 } else {
                     console.log('can not login');
@@ -60,19 +60,47 @@ export class UserService {
             })
     }
 
+
+    getUserFromServer() {
+        if (!this.utils.isTokenExpired(TOKEN)) {
+            const token = this.utils.getToken(TOKEN);
+            this.http.post(this.appConfig.apiUrl + '/users/currentUser', { 'token': token })
+                .subscribe((res: Response) => {
+                    if (res.success) {
+                        this.currentUser.next(res.payload);
+                    }
+                },
+                (err: HttpErrorResponse) => {
+                    if (err.error instanceof Error) {
+                        console.log('client-side error');
+                    } else {
+                        console.log('server-side error');
+                    }
+                })
+        }
+    }
+
+
     logout() {
         this.loginStatus.next(false);
+        this.currentUser.next(null);
         this.utils.removeToken(TOKEN);
     }
 
-    getLoginStatus(): BehaviorSubject<boolean> {
+    getLoginStatus(): Observable<boolean> {
         return this.loginStatus;
     }
+
+    getCurrentUser(): Observable<string> {
+        return this.currentUser;
+    }
+
 
     // when startup
     checkUser(): Observable<boolean> {
         if (!this.utils.isTokenExpired(TOKEN)) {
             this.loginStatus.next(true);
+            this.getUserFromServer();
             return Observable.of(true);
         } else {
             console.log('no token or token is expired');

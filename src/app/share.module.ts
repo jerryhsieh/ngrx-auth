@@ -8,7 +8,7 @@
 import { NgModule } from '@angular/core';
 
 import { MatSidenavModule, MatToolbarModule, MatButtonModule, MatListModule, MatIconModule } from '@angular/material';
-import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatCardModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatCardModule, MatProgressSpinnerModule, MatMenuModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -25,6 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatCardModule,
         MatInputModule,
         MatProgressSpinnerModule,
+        MatMenuModule,
         FlexLayoutModule,
         ReactiveFormsModule
     ],
@@ -39,6 +40,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatCheckboxModule,
         MatInputModule,
         MatProgressSpinnerModule,
+        MatMenuModule,
         FlexLayoutModule,
         ReactiveFormsModule
     ]
