@@ -20,6 +20,9 @@ export function jwtOptionsFactory() {
 
 
 describe('UserService', () => {
+    let service: UserService;
+    let backend: HttpTestingController;
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
@@ -31,35 +34,37 @@ describe('UserService', () => {
                         useFactory: jwtOptionsFactory
                     }
                 })
-
             ],
             providers: [UserService, AppConfig, UtilsService]
         });
-
+        service = TestBed.get(UserService);
+        backend = TestBed.get(HttpTestingController);
     });
 
-    afterEach(inject([HttpTestingController], (backend: HttpTestingController) => {
+    afterEach(() => {
         backend.verify();
-    }));
+    });
 
     it('should be created', inject([UserService], (service: UserService) => {
         expect(service).toBeTruthy();
     }));
 
+    it(`should send an expected login request`, async(() => {
+        const user = {
+            username: 'Jerry',
+            password: 'jerry',
+            rememberMe: true
+        };
+        service.login(user).subscribe(status => {
+            console.log('got status is', status);
+            expect(status).toEqual(true);
+        });
 
-    it(`should send an expected login request`, async(inject([UserService, HttpTestingController],
-        (service: UserService, backend: HttpTestingController) => {
-            service.login({ username: 'Jerry', password: 'jerry' }).subscribe();
+        const req = backend.expectOne('http://localhost:3000/api/users/authenticate');
+        expect(req.request.method).toBe('POST');
+        expect(req.request.body.username).toBe('Jerry');
+        req.flush({ success: true, token: '12345' });
 
-            backend.expectOne((req: HttpRequest<any>) => {
-                const body = new HttpParams({ fromString: req.body });
-
-                return req.url === 'http://localhost:3000/api/users/authenticate'
-                    && req.method === 'POST'
-                    && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-                    && body.get('username') === 'Jerry'
-                    && body.get('password') === 'jerry';
-            }, `POST to 'api/users/authenticate' with form-encoded username and password`);
-        })));
+    }));
 
 });

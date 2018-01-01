@@ -17,10 +17,20 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { PageNotFoundComponent } from './not-found.component';
 import { ShareModule } from './share.module';
 
+import { UserService } from './users/service/user.service';
+import { Observable } from 'rxjs/Observable';
+
 describe('app-routing', () => {
     let location: Location;
     let router: Router;
     let fixture;
+    class UserServiceStub {
+        getLoginStatus = jasmine.createSpy('getLoginStatus')
+            .and.returnValue(Observable.of(true));
+
+        logout = jasmine.createSpy('logout')
+            .and.returnValue(true);
+    }
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -33,6 +43,9 @@ describe('app-routing', () => {
                 HomeComponent,
                 NavbarComponent,
                 PageNotFoundComponent
+            ],
+            providers: [
+                { provide: UserService, useClass: UserServiceStub }
             ]
         });
         router = TestBed.get(Router);
@@ -42,16 +55,19 @@ describe('app-routing', () => {
         router.initialNavigation();
     });
 
-    it('navigate to "" redirect to /home ', fakeAsync(() => {
-        router.navigate(['']);
-        tick();
-        expect(location.path()).toBe('/home');
+    it('navigate to "" redirect to /home ', async(() => {
+        router.navigate(['']).then(() => {
+            expect(location.path()).toBe('/home');
+            console.log('after expect');
+        })
+
     }));
 
-    it('navigate to /home', fakeAsync(() => {
-        router.navigate(['/home']);
-        tick();
-        expect(location.path()).toBe('/home');
+    it('navigate to /home', async(() => {
+        router.navigate(['/home']).then(() => {
+            expect(location.path()).toBe('/home');
+        })
+
     }));
 
 

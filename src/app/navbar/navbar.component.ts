@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { UserService } from '../users/service/user.service';
-import 'rxjs/add/observable/interval';
+
 
 @Component({
     selector: 'app-navbar',
