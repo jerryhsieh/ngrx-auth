@@ -11,7 +11,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { UserService } from '../users/service/user.service';
 
 
@@ -22,13 +21,15 @@ import { UserService } from '../users/service/user.service';
 })
 export class NavbarComponent implements OnInit {
 
-    login$: BehaviorSubject<boolean>;
+    login$: Observable<boolean>;
+    user$: Observable<string>;
     constructor(
         private userService: UserService,
         private router: Router) { }
 
     ngOnInit() {
-        this.login$ = this.userService.getLoginStatus()
+        this.login$ = this.userService.getLoginStatus();
+        this.user$ = this.userService.getCurrentUser();
     }
 
     logout() {
