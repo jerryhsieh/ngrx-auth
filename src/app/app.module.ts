@@ -26,6 +26,14 @@ import { UtilsService, TOKEN } from './helper/utils.service';
 import { JwtModule, JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { StartupService } from './services/startup.service';
 
+// for ngrx/store
+import { StoreModule } from '@ngrx/store';
+import * as store from './store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { EffectsModule } from '@ngrx/effects';
+
+
 export function startupServiceFactory(startupService: StartupService): Function { return () => startupService.load(); }
 
 export function jwtOptionsFactory() {
@@ -50,6 +58,9 @@ export function jwtOptionsFactory() {
         BrowserAnimationsModule,
         HttpClientModule,
         ShareModule,
+        StoreModule.forRoot(store.reducers),
+        EffectsModule.forRoot([store.UserEffects]),
+        !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
         JwtModule.forRoot({
             jwtOptionsProvider: {
                 provide: JWT_OPTIONS,

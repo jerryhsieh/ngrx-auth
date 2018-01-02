@@ -11,18 +11,26 @@ import { Router } from '@angular/router';
 import { UserService } from '../users/service/user.service';
 import { UtilsService } from '../helper/utils.service';
 
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../store';
+
 @Injectable()
 export class StartupService {
 
     constructor(
         private injector: Injector,
         private userService: UserService,
-        private utils: UtilsService
+        private utils: UtilsService,
+        private store: Store<fromRoot.State>
     ) { }
 
     load(): Promise<any> {
         return new Promise((resolve, reject) => {
             console.log('in startup');
+            if (!this.utils.isTokenExpired()) {
+                this.store.dispatch(new fromRoot.getUserAction());
+            }
+
             return this.userService.checkUser()
                 .subscribe(res => {
                     if (res) {

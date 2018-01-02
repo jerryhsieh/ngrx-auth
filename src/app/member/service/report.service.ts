@@ -13,6 +13,8 @@ import { AppConfig } from '../../app.config';
 import { Report } from '../model/report';
 
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+
 
 @Injectable()
 export class ReportService {
@@ -38,7 +40,7 @@ export class ReportService {
                     return res;
                 })
         } else {
-            return Observable.of(this.reports);
+            return of(this.reports);
         }
     }
 

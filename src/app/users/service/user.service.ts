@@ -13,15 +13,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/of';
+import { of } from 'rxjs/observable/of';
 
 import { UtilsService, TOKEN } from '../../helper/utils.service';
 import { AppConfig } from '../../app.config';
-
-interface Response {
-    success: boolean;
-    payload?: string;
-}
+import { User, Response } from '../../models';
 
 @Injectable()
 export class UserService {
@@ -33,17 +29,37 @@ export class UserService {
         private appConfig: AppConfig,
         private utils: UtilsService) { }
 
-    login(loginData): Observable<boolean> {
+    loginToServer(loginData): Observable<Response> {
         let username = loginData.username.trim();
         let password = loginData.password.trim();
-        return this.http.post(this.appConfig.apiUrl + '/users/authenticate', { username: loginData.username, password: loginData.password })
+        return this.http.post<Response>(this.appConfig.apiUrl + '/users/authenticate', { username: username, password: password });
+    }
+
+    getUserFromServer(): Observable<string> {
+        if (!this.utils.isTokenExpired(TOKEN)) {
+            const token = this.utils.getToken(TOKEN);
+            return this.http.post(this.appConfig.apiUrl + '/users/currentUser', { 'token': token })
+                .map((res: Response) => {
+                    if (res.success) {
+                        return res.payload;
+                    } else {
+                        return null;
+                    }
+                })
+        } else {
+            return of(null);
+        }
+    }
+
+    login(loginData): Observable<boolean> {
+        return this.loginToServer(loginData)
             .map((res: Response) => {
                 if (res.success) {
                     this.loginStatus.next(true);
                     if (loginData.rememberMe) {
                         this.utils.writeToken(TOKEN, res.payload);
                     }
-                    this.currentUser.next(username);          // initial current user
+                    this.currentUser.next(loginData.username);          // initial current user
                     return true;
                 } else {
                     console.log('can not login');
@@ -56,30 +72,23 @@ export class UserService {
                 } else {
                     console.log('server-side error');
                 }
-                return Observable.of(false);
+                return of(false);
             })
     }
 
-
-    getUserFromServer() {
-        if (!this.utils.isTokenExpired(TOKEN)) {
-            const token = this.utils.getToken(TOKEN);
-            this.http.post(this.appConfig.apiUrl + '/users/currentUser', { 'token': token })
-                .subscribe((res: Response) => {
-                    if (res.success) {
-                        this.currentUser.next(res.payload);
-                    }
-                },
-                (err: HttpErrorResponse) => {
-                    if (err.error instanceof Error) {
-                        console.log('client-side error');
-                    } else {
-                        console.log('server-side error');
-                    }
-                })
-        }
+    getUser() {
+        this.getUserFromServer()
+            .subscribe(res => {
+                this.currentUser.next(res);
+            },
+            (err: HttpErrorResponse) => {
+                if (err.error instanceof Error) {
+                    console.log('client-side error');
+                } else {
+                    console.log('server-side error');
+                }
+            })
     }
-
 
     logout() {
         this.loginStatus.next(false);
@@ -100,12 +109,12 @@ export class UserService {
     checkUser(): Observable<boolean> {
         if (!this.utils.isTokenExpired(TOKEN)) {
             this.loginStatus.next(true);
-            this.getUserFromServer();
-            return Observable.of(true);
+            this.getUser();
+            return of(true);
         } else {
             console.log('no token or token is expired');
             this.utils.removeToken(TOKEN);
-            return Observable.of(false);
+            return of(false);
         }
     }
 }

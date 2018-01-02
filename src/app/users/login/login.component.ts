@@ -11,6 +11,9 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 
 import { UserService } from '../service/user.service';
 
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../store';
+
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -22,6 +25,7 @@ export class LoginComponent implements OnInit {
     constructor(
         private router: Router,
         private fb: FormBuilder,
+        private store: Store<fromRoot.State>,
         private userService: UserService) { }
 
     ngOnInit() {
@@ -38,6 +42,7 @@ export class LoginComponent implements OnInit {
 
     login() {
         console.log(this.form.value);
+        this.store.dispatch(new fromRoot.LoginAction(this.form.value));
         this.userService.login(this.form.value)
             .subscribe(res => {
                 if (res) {
