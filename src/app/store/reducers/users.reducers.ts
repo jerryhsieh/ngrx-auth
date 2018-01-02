@@ -8,7 +8,7 @@
 
 import { ActionReducer, Action, ActionReducerMap } from '@ngrx/store';
 
-import * as users from '../actions';
+import * as actions from '../actions';
 
 
 export interface State {
@@ -21,12 +21,12 @@ const initialState: State = {
     currentUser: ''
 }
 
-export function reducer(state: State = initialState, action: users.UserActions): State {
+export function reducer(state: State = initialState, action: actions.UserActions): State {
     switch (action.type) {
-        case users.LOGOUT:
+        case actions.LOGOUT:
             return initialState;
-        case users.LOGIN_SUCCESS:
-        case users.GETUSER_SUCCESS:
+        case actions.LOGIN_SUCCESS:
+        case actions.GETUSER_SUCCESS:
             return Object.assign({}, state, { currentUser: action.payload, isLogin: true });
         default:
             return state

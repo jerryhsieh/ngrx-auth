@@ -12,7 +12,7 @@ import { ShareModule } from '../share.module';
 import { MemberRoutingModule } from './member-routing.module';
 import { MemberComponent } from './member/member.component';
 
-import { ReportService } from './service/report.service';
+//import { ReportService } from './service/report.service';
 import { ReportComponent } from './report/report.component';
 
 @NgModule({
@@ -22,6 +22,6 @@ import { ReportComponent } from './report/report.component';
         ShareModule
     ],
     declarations: [MemberComponent, ReportComponent],
-    providers: [ReportService]
+    providers: []
 })
 export class MemberModule { }

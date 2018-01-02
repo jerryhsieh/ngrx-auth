@@ -12,6 +12,7 @@ import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatCardModule, M
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { ReportService } from './member/service/report.service';
 
 @NgModule({
     imports: [
@@ -43,7 +44,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatMenuModule,
         FlexLayoutModule,
         ReactiveFormsModule
-    ]
+    ],
+    providers: [ReportService]
 })
 
 

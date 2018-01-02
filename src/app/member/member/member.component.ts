@@ -9,8 +9,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Report } from '../model/report';
-import { ReportService } from '../service/report.service';
+import { Report } from '../../models';
+//import { ReportService } from '../service/report.service';
+
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../store';
 
 @Component({
     selector: 'app-member',
@@ -22,12 +25,23 @@ export class MemberComponent implements OnInit {
     loading: boolean = false;
     reports: Report[];
     constructor(
-        private reportService: ReportService,
+        //private reportService: ReportService,
+        private store: Store<fromRoot.State>,
         private router: Router
     ) { }
 
     ngOnInit() {
         this.loading = true;
+        //this.store.dispatch(new fromRoot.getReportAction());
+        this.store.select(fromRoot.getReports)
+            .subscribe(res => {
+                this.reports = res;
+                console.log(res);
+                this.loading = false;
+            }, err => {
+                console.log(err);
+            })
+        /*
         this.reportService.getReports()
             .subscribe(res => {
                 this.reports = res;
@@ -36,6 +50,7 @@ export class MemberComponent implements OnInit {
             }, err => {
                 console.log(err);
             })
+        */
     }
 
     onClick(report) {

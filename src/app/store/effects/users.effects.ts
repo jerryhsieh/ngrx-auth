@@ -19,7 +19,7 @@ import { defer } from 'rxjs/observable/defer';
 import { of } from 'rxjs/observable/of';
 
 
-import * as users from '../actions/users.actions';
+import * as actions from '../actions';
 import { UserService } from '../../users/service/user.service';
 import { UtilsService, TOKEN } from '../../helper/utils.service';
 import { User, Response } from '../../models';
@@ -34,8 +34,8 @@ export class UserEffects {
 
 
     @Effect()
-    loginEffect$: Observable<Action> = this.action$.ofType(users.LOGIN)
-        .map((action: users.LoginAction) => action.payload)
+    loginEffect$: Observable<Action> = this.action$.ofType(actions.LOGIN)
+        .map((action: actions.LoginAction) => action.payload)
         .switchMap((user: User) => {
             return this.userService.loginToServer(user)
                 .map((res: Response) => {
@@ -43,23 +43,22 @@ export class UserEffects {
                         if (user.rememberMe) {
                             this.utils.writeToken(TOKEN, res.payload);
                         }
-                        return new users.LoginSuccessAction(user.username);
+                        return new actions.LoginSuccessAction(user.username);
                     } else {
-                        return new users.LoginFailAction(res.payload);
+                        return new actions.LoginFailAction(res.payload);
                     }
 
                 })
-                .catch((err) => of(new users.LoginFailAction(err)));
+                .catch((err) => of(new actions.LoginFailAction(err)));
         })
 
     @Effect()
-    getUserEffect$: Observable<Action> = this.action$.ofType(users.GETUSER)
+    getUserEffect$: Observable<Action> = this.action$.ofType(actions.GETUSER)
         .switchMap(() => {
             return this.userService.getUserFromServer()
                 .filter(user => (user !== null))
-                .do(user => console.log('got user in effects', user))
-                .map(user => new users.getUserSuccessAction(user))
-                .catch(err => of(new users.getUserFailAction(err)));
+                .map(user => new actions.getUserSuccessAction(user))
+                .catch(err => of(new actions.getUserFailAction(err)));
         })
 
 }

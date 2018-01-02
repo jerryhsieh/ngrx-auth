@@ -59,7 +59,7 @@ export function jwtOptionsFactory() {
         HttpClientModule,
         ShareModule,
         StoreModule.forRoot(store.reducers),
-        EffectsModule.forRoot([store.UserEffects]),
+        EffectsModule.forRoot([store.UserEffects, store.ReportEffects]),
         !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
         JwtModule.forRoot({
             jwtOptionsProvider: {

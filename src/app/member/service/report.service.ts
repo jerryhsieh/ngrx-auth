@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { AppConfig } from '../../app.config';
-import { Report } from '../model/report';
+import { Report, Response } from '../../models';
 
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
@@ -28,16 +28,16 @@ export class ReportService {
     }
 
 
-    getReportsFromServer(): Observable<Report[]> {
-        return this.http.get<Report[]>(this.appConfig.apiUrl + '/report');
+    getReportsFromServer(): Observable<Response> {
+        return this.http.get<Response>(this.appConfig.apiUrl + '/report');
     }
 
     getReports(): Observable<Report[]> {
         if (this.reports.length === 0) {
             return this.getReportsFromServer()
                 .map(res => {
-                    this.reports = res;
-                    return res;
+                    this.reports = res.payload;
+                    return res.payload;
                 })
         } else {
             return of(this.reports);
