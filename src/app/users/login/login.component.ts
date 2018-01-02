@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { UserService } from '../service/user.service';
+//import { UserService } from '../service/user.service';
 
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../store';
@@ -23,10 +23,10 @@ export class LoginComponent implements OnInit {
 
     public form: FormGroup;
     constructor(
-        private router: Router,
         private fb: FormBuilder,
         private store: Store<fromRoot.State>,
-        private userService: UserService) { }
+        //private userService: UserService,
+        private router: Router) { }
 
     ngOnInit() {
         this.form = this.fb.group({
@@ -43,11 +43,20 @@ export class LoginComponent implements OnInit {
     login() {
         console.log(this.form.value);
         this.store.dispatch(new fromRoot.LoginAction(this.form.value));
+        this.store.select(fromRoot.getIsLogin)
+            .subscribe(res => {
+                if (res) {
+                    this.router.navigate(['/member']);
+                }
+            })
+
+        /*
         this.userService.login(this.form.value)
             .subscribe(res => {
                 if (res) {
                     this.router.navigate(['/member']);
                 }
             })
+        */
     }
 }

@@ -1,3 +1,10 @@
+//
+//
+// File name : users.actions.ts
+// Created by: Jerry Hsieh @ 2018-01-02
+//
+// Copyright (C) 2018 by Jerry Hsieh. All rights reserved
+//
 import { Action } from '@ngrx/store';
 import { User } from '../../models';
 

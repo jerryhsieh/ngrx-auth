@@ -1,3 +1,11 @@
+//
+//
+// File name : users.effects.ts
+// Created by: Jerry Hsieh @ 2018-01-02
+//
+// Copyright (C) 2017 by Jerry Hsieh. All rights reserved
+//
+
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
@@ -7,6 +15,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
+import { defer } from 'rxjs/observable/defer';
 import { of } from 'rxjs/observable/of';
 
 
@@ -22,6 +31,7 @@ export class UserEffects {
         private userService: UserService,
         private utils: UtilsService
     ) { }
+
 
     @Effect()
     loginEffect$: Observable<Action> = this.action$.ofType(users.LOGIN)

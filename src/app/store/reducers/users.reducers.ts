@@ -1,3 +1,11 @@
+//
+//
+// File name : users.reducers.ts
+// Created by: Jerry Hsieh @ 2018-01-02
+//
+// Copyright (C) 2017 by Jerry Hsieh. All rights reserved
+//
+
 import { ActionReducer, Action, ActionReducerMap } from '@ngrx/store';
 
 import * as users from '../actions';

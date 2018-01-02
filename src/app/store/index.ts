@@ -1,3 +1,11 @@
+//
+//
+// File name : index.ts
+// Created by: Jerry Hsieh @ 2018-01-02
+//
+// Copyright (C) 2018 by Jerry Hsieh. All rights reserved
+//
+
 import { createSelector } from 'reselect';
 import { ActionReducer, ActionReducerMap } from '@ngrx/store';
 
