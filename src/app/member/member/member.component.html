@@ -1,9 +1,12 @@
-<div *ngIf="loading" class="center">
-  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-</div>
-<div *ngIf="!loading">
+
+<div *ngIf="reports$ | async; let reports; else loading ">
   <app-report-list [reports]="reports"></app-report-list>
 </div>
+
+<ng-template #loading>
+  <h2>loading...</h2>
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</ng-template>
 
 
 

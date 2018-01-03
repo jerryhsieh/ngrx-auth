@@ -15,6 +15,8 @@ import { Report } from '../../models';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../store';
 
+import { Observable } from 'rxjs/Observable';
+
 @Component({
     selector: 'app-member',
     templateUrl: './member.component.html',
@@ -22,7 +24,7 @@ import * as fromRoot from '../../store';
 })
 export class MemberComponent implements OnInit {
     loading: boolean = false;
-    reports: Report[];
+    reports$: Observable<Report[]>;
     constructor(
         //private reportService: ReportService,
         private reportSelectService: ReportSelectService,
@@ -31,37 +33,21 @@ export class MemberComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.loading = true;
-        this.store.dispatch(new fromRoot.getReportAction());
-        this.store.select(fromRoot.getReports)
-            .subscribe(res => {
-                this.reports = res;
-                this.loading = false;
-            }, err => {
-                console.log(err);
-            });
-
-        //this.reportSelectService.selected$
-        //.subscribe(report => this.selectReport(report));
-
-        /*
-        this.reportService.getReports()
-            .subscribe(res => {
-                this.reports = res;
-                console.log(res);
-                this.loading = false;
-            }, err => {
-                console.log(err);
+        //this.loading = true;
+        //this.store.dispatch(new fromRoot.getReportAction());
+        this.reports$ = this.store.select(fromRoot.getReports)
+            .do(reports => {
+                if (!reports.length) {
+                    this.store.dispatch(new fromRoot.getReportAction())
+                }
             })
-        */
+            .filter(reports => !!reports);
+        //this.reports$ = this.reportService.getReports()
     }
 
+    /*
     selectReport(report) {
         console.log('in side select report');
-        this.router.navigate(['/member/report/', report.id]);
-    }
-    /*
-    onClick(report) {
         this.router.navigate(['/member/report/', report.id]);
     }
     */
