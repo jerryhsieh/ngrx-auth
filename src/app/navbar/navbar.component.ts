@@ -40,6 +40,7 @@ export class NavbarComponent implements OnInit {
     logout() {
         //this.userService.logout();
         this.store.dispatch(new fromRoot.LogoutAction());
+        this.store.dispatch(new fromRoot.resetReportAction());
         this.router.navigate(['/']);
     }
 }

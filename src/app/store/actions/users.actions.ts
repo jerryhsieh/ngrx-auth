@@ -12,7 +12,11 @@ import { User } from '../../models';
 export const LOGIN = '[users] LOGIN';
 export const LOGIN_SUCCESS = '[users]  LOGIN_SUCCESS';
 export const LOGIN_FAIL = '[users] LOGIN_FAIL';
+
 export const LOGOUT = '[users] LOGOUT';
+export const LOGOUT_SUCCESS = '[users] LOGOUT_SUCCESS';
+export const LOGOUT_FAIL = '[users] LOGOUT_FAIL';
+
 export const GETUSER = '[users] GETUSER';
 export const GETUSER_SUCCESS = '[users] GETUSER_SUCCESS';
 export const GETUSER_FAIL = '[users] GETUSER_FAIL';
@@ -38,6 +42,15 @@ export class LogoutAction implements Action {
     readonly type = LOGOUT;
 }
 
+export class LogoutSuccessAction implements Action {
+    readonly type = LOGOUT_SUCCESS;
+}
+
+export class LogoutFailAction implements Action {
+    readonly type = LOGOUT_FAIL;
+}
+
+
 export class getUserAction implements Action {
     readonly type = GETUSER;
 }
@@ -59,6 +72,8 @@ export type UserActions
     | LoginSuccessAction
     | LoginFailAction
     | LogoutAction
+    | LogoutSuccessAction
+    | LogoutFailAction
     | getUserAction
     | getUserSuccessAction
     | getUserFailAction;

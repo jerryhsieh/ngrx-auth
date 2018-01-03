@@ -16,13 +16,12 @@ export const GETREPORT_SUCCESS = '[report] GETREPORT_SUCCESS';
 export const GETREPORT_FAIL = '[report] GETREPORT_FAIL';
 
 export const GETREPORTID = '[report] GETREPORTID';
-
+export const RESET_REPORT = '[report] RESET_REPORT';        // reset to initial state
 
 // define Actions classes
 export class getReportAction implements Action {
     readonly type = GETREPORT;
 }
-
 
 export class getReportSuccessAction implements Action {
     readonly type = GETREPORT_SUCCESS;
@@ -36,14 +35,13 @@ export class getReportFailAction implements Action {
     constructor(public payload: any) { }
 }
 
-export class getReportIdAction implements Action {
-    readonly type = GETREPORTID;
 
-    constructor(public payload: number) { }
+export class resetReportAction implements Action {
+    readonly type = RESET_REPORT;
 }
 
 export type ReportActions
     = getReportAction
     | getReportSuccessAction
     | getReportFailAction
-    | getReportIdAction;
+    | resetReportAction;

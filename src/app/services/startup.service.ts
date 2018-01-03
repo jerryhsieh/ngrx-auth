@@ -26,14 +26,12 @@ export class StartupService {
 
     load(): Promise<any> {
         return new Promise((resolve, reject) => {
-            console.log('in startup');
             if (!this.utils.isTokenExpired()) {                     // token not expired
                 this.store.dispatch(new fromRoot.getUserAction());
                 return this.store.select(fromRoot.getIsLogin)
                     .filter(status => status)
                     .subscribe(res => {
                         if (res) {
-                            console.log('current state is ', res);
                             setInterval(() => {
                                 this.checkStatus();
                             }, 1000 * 60 * 5);                    // check curren status every 5 min
@@ -69,7 +67,6 @@ export class StartupService {
         if (this.utils.isTokenExpired()) {
             this.store.dispatch(new fromRoot.LogoutAction());
             //this.userService.logout();
-
             const router = this.injector.get(Router);
             router.navigate(['/']);                     // route back to home page            
             console.log('logout due to token expired');

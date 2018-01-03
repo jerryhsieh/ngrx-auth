@@ -14,6 +14,8 @@ import { MemberComponent } from './member/member.component';
 
 //import { ReportService } from './service/report.service';
 import { ReportComponent } from './report/report.component';
+import { ReportListComponent } from './report-list/report-list.component';
+import { ReportSelectService } from './service/report-select.service';
 
 @NgModule({
     imports: [
@@ -21,7 +23,7 @@ import { ReportComponent } from './report/report.component';
         MemberRoutingModule,
         ShareModule
     ],
-    declarations: [MemberComponent, ReportComponent],
-    providers: []
+    declarations: [MemberComponent, ReportComponent, ReportListComponent],
+    providers: [ReportSelectService]
 })
 export class MemberModule { }

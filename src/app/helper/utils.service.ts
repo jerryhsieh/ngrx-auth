@@ -18,11 +18,9 @@ export class UtilsService {
 
     constructor(private jwtHelper: JwtHelperService) { }
 
-
     isTokenExpired(token: string = TOKEN): boolean {
         let jwtStr = localStorage.getItem(token);
         if (jwtStr) {
-            console.log('got token, check if expired');
             return this.jwtHelper.isTokenExpired(jwtStr);
         } else {
             return true;            // no token, token expired
@@ -30,7 +28,6 @@ export class UtilsService {
     }
 
     writeToken(token: string = TOKEN, value: string) {
-        console.log('writing ' + token + 'with value = ' + value);
         //this.jwtHelper.isTokenExpired(value);
         localStorage.setItem(token, value);
     }

@@ -31,7 +31,6 @@ export class AuthGuard implements CanActivate, CanLoad {
         */
         this.store.select(fromRoot.getIsLogin)
             .subscribe(res => {
-                console.log('current state is ', res);
                 this.loginStatus = res;
             })
     }

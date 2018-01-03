@@ -61,4 +61,11 @@ export class UserEffects {
                 .catch(err => of(new actions.getUserFailAction(err)));
         })
 
+    @Effect()
+    logoutEffect$: Observable<Action> = this.action$.ofType(actions.LOGOUT)
+        .switchMap(() => {
+            this.utils.removeToken(TOKEN);
+            return of(new actions.LogoutSuccessAction());
+        })
+
 }

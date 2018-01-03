@@ -28,4 +28,4 @@ export const getCurrentUser = createSelector(getUserState, users.getCurrentUser)
 
 export const getReportState = (state: State) => state.report;
 export const getReports = createSelector(getReportState, report.getReports);
-export const getSelectedReport = createSelector(getReportState, report.getSelectedReport);
+

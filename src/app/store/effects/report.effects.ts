@@ -15,6 +15,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/take';
 import { defer } from 'rxjs/observable/defer';
 import { of } from 'rxjs/observable/of';
 
@@ -30,19 +31,18 @@ export class ReportEffects {
     ) { }
 
     @Effect()
-    init$: Observable<Action> = defer(() => {
-        console.log('inside report init effect');
-        return this.reportService.getReportsFromServer()
-            .map((res: Response) => {
-                console.log('in get reports effect');
-                if (res.success) {
-                    return new actions.getReportSuccessAction(res.payload);
-                } else {
-                    return new actions.getReportFailAction(res.payload);
-                }
-            })
-            .catch(err => of(new actions.getUserFailAction(err)));
+    getReportEffect$: Observable<Action> = this.action$.ofType(actions.GETREPORT)
+        .switchMap(() => {
+            return this.reportService.getReportsFromServer()
+                .map((res: Response) => {
+                    if (res.success) {
+                        return new actions.getReportSuccessAction(res.payload);
+                    } else {
+                        return new actions.getReportFailAction(res.payload);
+                    }
+                })
+                .catch(err => of(new actions.getUserFailAction(err)));
 
-    })
+        })
 
 }

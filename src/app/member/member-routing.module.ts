@@ -15,7 +15,7 @@ import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
     { path: '', component: MemberComponent },
-    { path: 'report/:id', component: ReportComponent }
+    { path: 'report', component: ReportComponent }
 ];
 
 @NgModule({
