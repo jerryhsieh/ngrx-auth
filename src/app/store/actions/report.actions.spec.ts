@@ -1,7 +1,7 @@
-import { Report.Actions } from './report.actions';
+import { getReportAction } from './report.actions';
 
 describe('Report.Actions', () => {
-  it('should create an instance', () => {
-    expect(new Report.Actions()).toBeTruthy();
-  });
+    it('should create an instance', () => {
+        expect(new getReportAction()).toBeTruthy();
+    });
 });

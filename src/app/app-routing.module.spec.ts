@@ -20,17 +20,30 @@ import { ShareModule } from './share.module';
 import { UserService } from './users/service/user.service';
 import { Observable } from 'rxjs/Observable';
 
+import { Store } from '@ngrx/store';
+
+class MockStore {
+    public dispatch(obj) {
+        console.log('dispatching from the mock store!')
+    }
+    public select(obj) {
+        console.log('selecting from the mock store!');
+        return Observable.of({})
+    }
+}
+
+class UserServiceStub {
+    getLoginStatus = jasmine.createSpy('getLoginStatus')
+        .and.returnValue(Observable.of(true));
+
+    logout = jasmine.createSpy('logout')
+        .and.returnValue(true);
+}
+
 describe('app-routing', () => {
     let location: Location;
     let router: Router;
     let fixture;
-    class UserServiceStub {
-        getLoginStatus = jasmine.createSpy('getLoginStatus')
-            .and.returnValue(Observable.of(true));
-
-        logout = jasmine.createSpy('logout')
-            .and.returnValue(true);
-    }
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -45,7 +58,8 @@ describe('app-routing', () => {
                 PageNotFoundComponent
             ],
             providers: [
-                { provide: UserService, useClass: UserServiceStub }
+                { provide: UserService, useClass: UserServiceStub },
+                { provide: Store, useClass: MockStore }
             ]
         });
         router = TestBed.get(Router);

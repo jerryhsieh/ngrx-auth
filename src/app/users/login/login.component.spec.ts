@@ -9,22 +9,40 @@ import { ShareModule } from '../../share.module';
 import { Router } from '@angular/router';
 import { UserService } from '../service/user.service';
 import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+
+
+// mocked up service
+class RouterStub {
+    navigateByUrl(url: string) { return url; }
+}
+class UserServiceStub {
+    getLoginStatus = jasmine.createSpy('getLoginStatus')
+        .and.returnValue(Observable.of(true));
+
+    logout = jasmine.createSpy('logout')
+        .and.returnValue(true);
+
+    loginToServer = jasmine.createSpy('loginToServer')
+        .and.returnValue(Observable.of({ success: true, payload: '1234' }));
+
+    getUserFromServer = jasmine.createSpy('getUserFromServer')
+        .and.returnValue(Observable.of('Jerry'));
+}
+
+class MockStore {
+    public dispatch(obj) {
+        console.log('dispatching from the mock store!')
+    }
+    public select(obj) {
+        console.log('selecting from the mock store!');
+        return Observable.of([report])
+    }
+}
 
 describe('LoginComponent', () => {
     let component: LoginComponent;
     let fixture: ComponentFixture<LoginComponent>;
-
-    class RouterStub {
-        navigateByUrl(url: string) { return url; }
-    }
-    class UserServiceStub {
-        getLoginStatus = jasmine.createSpy('getLoginStatus')
-            .and.returnValue(Observable.of(true));
-
-        logout = jasmine.createSpy('logout')
-            .and.returnValue(true);
-    }
-
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -33,6 +51,7 @@ describe('LoginComponent', () => {
             providers: [
                 { provide: UserService, useClass: UserServiceStub },
                 { provide: Router, useClass: RouterStub },
+                { provide: Store, useClass: MockStore }
             ]
         })
             .compileComponents();

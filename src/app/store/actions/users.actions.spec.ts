@@ -1,7 +1,12 @@
-import { Users.Actions } from './users.actions';
+import { LoginAction } from './users.actions';
 
-describe('Users.Actions', () => {
-  it('should create an instance', () => {
-    expect(new Users.Actions()).toBeTruthy();
-  });
+import { User } from '../../models';
+
+describe('LoginAction', () => {
+    it('should create an instance', () => {
+        let user: User = {
+            username: 'abc'
+        }
+        expect(new LoginAction(user)).toBeTruthy();
+    });
 });

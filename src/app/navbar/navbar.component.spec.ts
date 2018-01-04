@@ -15,32 +15,47 @@ import { UserService } from '../users/service/user.service';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
+import { ShareModule } from '../share.module';
+import { Store } from '@ngrx/store';
+
+// mock data and service
+class UserServiceStub {
+    getLoginStatus = jasmine.createSpy('getLoginStatus')
+        .and.returnValue(Observable.of(true));
+
+    logout = jasmine.createSpy('logout')
+        .and.returnValue(true);
+}
+
+class RouterStub {
+    navigateByUrl(url: string) { return url; }
+}
+
+class MockStore {
+    public dispatch(obj) {
+        console.log('dispatching from the mock store!')
+    }
+    public select(obj) {
+        console.log('selecting from the mock store!');
+        return Observable.of(true)
+    }
+}
+
+
 describe('NavbarComponent', () => {
     let component: NavbarComponent;
     let fixture: ComponentFixture<NavbarComponent>;
-
-    class UserServiceStub {
-        getLoginStatus = jasmine.createSpy('getLoginStatus')
-            .and.returnValue(Observable.of(true));
-
-        logout = jasmine.createSpy('logout')
-            .and.returnValue(true);
-    }
-
-    class RouterStub {
-        navigateByUrl(url: string) { return url; }
-    }
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [NavbarComponent],
             imports: [
-                MatToolbarModule,
-                MatButtonModule
+                ShareModule
             ],
             providers: [
                 { provide: UserService, useClass: UserServiceStub },
-                { provide: Router, useClass: RouterStub }
+                { provide: Router, useClass: RouterStub },
+                { provide: Store, useClass: MockStore }
             ]
         })
             .compileComponents();
