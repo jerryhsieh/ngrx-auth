@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, CanActivateChild, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -8,7 +8,7 @@ import { of } from 'rxjs/observable/of';
 import * as fromStore from '../store';
 
 @Injectable()
-export class ReportGuard implements CanActivate {
+export class ReportGuard implements CanActivate, CanActivateChild {
 
     constructor(
         private store: Store<fromStore.State>
@@ -19,11 +19,18 @@ export class ReportGuard implements CanActivate {
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
         return this.checkStore().pipe(
-            tap(() => console.log('in report guard')),
             switchMap(() => of(true)),
             catchError(() => of(false))
         );
     }
+
+    canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this.checkStore().pipe(
+            switchMap(() => of(true)),
+            catchError(() => of(false))
+        );
+    }
+
 
     checkStore(): Observable<boolean> {
         return this.store.select(fromStore.getReportsLoaded)

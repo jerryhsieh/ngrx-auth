@@ -21,15 +21,14 @@ const routes: Routes = [
     {
         path: '',
         component: MemberComponent,
+        canActivateChild: [fromGuards.ReportGuard],
         children: [
-            { path: 'report-list', canActivate: [fromGuards.ReportGuard], component: ReportListComponent },
-            { path: 'report/:rptId', canActivate: [fromGuards.ReportGuard, fromGuards.ReportExistGuard], component: ReportComponent },
+            { path: 'report-list', component: ReportListComponent },
+            { path: 'report/:rptId', canActivate: [fromGuards.ReportExistGuard], component: ReportComponent },
             { path: '', redirectTo: 'report-list', pathMatch: 'full' }
 
         ]
     }
-
-    //{ path: '', component: MemberComponent },    
 ];
 
 @NgModule({

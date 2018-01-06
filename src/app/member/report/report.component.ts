@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ReportSelectService } from '../service/report-select.service';
+//import { ReportSelectService } from '../service/report-select.service';
 import { Report } from '../../models';
 
 import { Observable } from 'rxjs/Observable';
@@ -13,14 +13,15 @@ import * as fromStore from '../../store';
 @Component({
     selector: 'app-report',
     templateUrl: './report.component.html',
-    styleUrls: ['./report.component.css']
+    styleUrls: ['./report.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReportComponent implements OnInit {
 
     report$: Observable<Report>;
     constructor(
-        private reportSelectService: ReportSelectService,
-        private router: Router,
+        //private reportSelectService: ReportSelectService,
+        //private router: Router,
         private store: Store<fromStore.State>
     ) { }
 
