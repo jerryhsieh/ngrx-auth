@@ -7,7 +7,7 @@
 //
 import { NgModule } from '@angular/core';
 
-import { MatSidenavModule, MatToolbarModule, MatButtonModule, MatListModule, MatIconModule } from '@angular/material';
+import { MatSidenavModule, MatToolbarModule, MatButtonModule, MatListModule, MatIconModule, MatSnackBarModule } from '@angular/material';
 import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatCardModule, MatProgressSpinnerModule, MatMenuModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -26,6 +26,7 @@ import { ReportService } from './member/service/report.service';
         MatCardModule,
         MatInputModule,
         MatProgressSpinnerModule,
+        MatSnackBarModule,
         MatMenuModule,
         FlexLayoutModule,
         ReactiveFormsModule
@@ -41,6 +42,7 @@ import { ReportService } from './member/service/report.service';
         MatCheckboxModule,
         MatInputModule,
         MatProgressSpinnerModule,
+        MatSnackBarModule,
         MatMenuModule,
         FlexLayoutModule,
         ReactiveFormsModule

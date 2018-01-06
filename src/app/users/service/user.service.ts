@@ -21,8 +21,8 @@ import { User, Response } from '../../models';
 
 @Injectable()
 export class UserService {
-    loginStatus = new BehaviorSubject(false);
-    currentUser = new BehaviorSubject(null);
+    loginStatus$ = new BehaviorSubject(false);
+    currentUser$ = new BehaviorSubject(null);
 
     constructor(
         private http: HttpClient,
@@ -55,11 +55,11 @@ export class UserService {
         return this.loginToServer(loginData)
             .map((res: Response) => {
                 if (res.success) {
-                    this.loginStatus.next(true);
+                    this.loginStatus$.next(true);
                     if (loginData.rememberMe) {
                         this.utils.writeToken(TOKEN, res.payload);
                     }
-                    this.currentUser.next(loginData.username);          // initial current user
+                    this.currentUser$.next(loginData.username);          // initial current user
                     return true;
                 } else {
                     console.log('can not login');
@@ -79,7 +79,7 @@ export class UserService {
     getUser() {
         this.getUserFromServer()
             .subscribe(res => {
-                this.currentUser.next(res);
+                this.currentUser$.next(res);
             },
             (err: HttpErrorResponse) => {
                 if (err.error instanceof Error) {
@@ -91,24 +91,24 @@ export class UserService {
     }
 
     logout() {
-        this.loginStatus.next(false);
-        this.currentUser.next(null);
+        this.loginStatus$.next(false);
+        this.currentUser$.next(null);
         this.utils.removeToken(TOKEN);
     }
 
     getLoginStatus(): Observable<boolean> {
-        return this.loginStatus;
+        return this.loginStatus$;
     }
 
     getCurrentUser(): Observable<string> {
-        return this.currentUser;
+        return this.currentUser$;
     }
 
 
     // when startup
     checkUser(): Observable<boolean> {
         if (!this.utils.isTokenExpired(TOKEN)) {
-            this.loginStatus.next(true);
+            this.loginStatus$.next(true);
             this.getUser();
             return of(true);
         } else {

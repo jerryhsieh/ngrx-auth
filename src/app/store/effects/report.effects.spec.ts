@@ -60,4 +60,6 @@ describe('Report.Effects', () => {
 
         expect(effects.getReportEffect$).toBeObservable(expected);
     });
+
+
 });

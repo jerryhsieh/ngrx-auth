@@ -5,6 +5,10 @@ import { ReportSelectService } from '../service/report-select.service';
 import { Report } from '../../models';
 
 import { Observable } from 'rxjs/Observable';
+import { tap } from 'rxjs/operators/tap';
+
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../store';
 
 @Component({
     selector: 'app-report',
@@ -16,16 +20,23 @@ export class ReportComponent implements OnInit {
     report$: Observable<Report>;
     constructor(
         private reportSelectService: ReportSelectService,
-        private router: Router
+        private router: Router,
+        private store: Store<fromStore.State>
     ) { }
 
     ngOnInit() {
+        this.report$ = this.store.select(fromStore.getSelectedReport);
+        /*
         this.report$ = this.reportSelectService.selectedReport()
-            .do(report => {
+            .pipe(
+            tap(report => {
                 if (!report) {
                     this.router.navigate(['/member']);
                 }
-            });
+            }),
+        )
+        */
+
     }
 
 }

@@ -11,8 +11,7 @@ import { HomeComponent } from './home/home.component'
 import { NavbarComponent } from './navbar/navbar.component';
 import { PageNotFoundComponent } from './not-found.component';
 
-
-import { AuthGuard } from './services/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {

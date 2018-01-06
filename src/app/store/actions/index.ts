@@ -8,3 +8,4 @@
 
 export * from './users.actions';
 export * from './report.actions';
+export * from './router.actions';

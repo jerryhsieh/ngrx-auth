@@ -12,12 +12,12 @@ import { Effect, Actions } from '@ngrx/effects';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
 import { defer } from 'rxjs/observable/defer';
 import { of } from 'rxjs/observable/of';
-
+import { map } from 'rxjs/operators/map';
+import { switchMap } from 'rxjs/operators/switchMap';
+import { filter } from 'rxjs/operators/filter';
+import { catchError } from 'rxjs/operators/catchError';
 
 import * as actions from '../actions';
 import { UserService } from '../../users/service/user.service';
@@ -34,11 +34,11 @@ export class UserEffects {
 
 
     @Effect()
-    loginEffect$: Observable<Action> = this.action$.ofType(actions.LOGIN)
-        .map((action: actions.LoginAction) => action.payload)
-        .switchMap((user: User) => {
-            return this.userService.loginToServer(user)
-                .map((res: Response) => {
+    loginEffect$: Observable<Action> = this.action$.ofType(actions.LOGIN).pipe(
+        map((action: actions.LoginAction) => action.payload),
+        switchMap((user: User) => {
+            return this.userService.loginToServer(user).pipe(
+                map((res: Response) => {
                     if (res.success) {
                         if (user.rememberMe) {
                             this.utils.writeToken(TOKEN, res.payload);
@@ -48,17 +48,21 @@ export class UserEffects {
                         return new actions.LoginFailAction(res.payload);
                     }
 
-                })
-                .catch((err) => of(new actions.LoginFailAction(err)));
-        })
+                }),
+                catchError((err) => of(new actions.LoginFailAction(err))),
+            )
+        }),
+    );
+
 
     @Effect()
     getUserEffect$: Observable<Action> = this.action$.ofType(actions.GETUSER)
         .switchMap(() => {
-            return this.userService.getUserFromServer()
-                .filter(user => (user !== null))
-                .map(user => new actions.getUserSuccessAction(user))
-                .catch(err => of(new actions.getUserFailAction(err)));
+            return this.userService.getUserFromServer().pipe(
+                filter(user => (user !== null)),
+                map(user => new actions.getUserSuccessAction(user)),
+                catchError(err => of(new actions.getUserFailAction(err))),
+            )
         })
 
     @Effect()

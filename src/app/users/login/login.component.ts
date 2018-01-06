@@ -8,6 +8,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 
 //import { UserService } from '../service/user.service';
 
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
         private fb: FormBuilder,
         private store: Store<fromRoot.State>,
         //private userService: UserService,
+        private snackbar: MatSnackBar,
         private router: Router) { }
 
     ngOnInit() {
@@ -46,7 +48,11 @@ export class LoginComponent implements OnInit {
         this.store.select(fromRoot.getIsLogin)
             .subscribe(res => {
                 if (res) {
-                    this.router.navigate(['/member']);
+                    this.snackbar.open('登入成功', 'OK', { duration: 3000 });
+                    //this.router.navigate(['/member']);
+                    this.store.dispatch(new fromRoot.Go({ path: ['/member'] }));
+                } else {
+                    this.snackbar.open('請檢查使用者名稱或密碼', 'OK', { duration: 3000 });
                 }
             })
 

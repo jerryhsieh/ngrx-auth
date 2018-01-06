@@ -12,10 +12,24 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { MemberComponent } from './member/member.component';
 import { ReportComponent } from './report/report.component';
+import { ReportListComponent } from './report-list/report-list.component';
+
+
+import * as fromGuards from '../guards';
 
 const routes: Routes = [
-    { path: '', component: MemberComponent },
-    { path: 'report', component: ReportComponent }
+    {
+        path: '',
+        component: MemberComponent,
+        children: [
+            { path: 'report-list', canActivate: [fromGuards.ReportGuard], component: ReportListComponent },
+            { path: 'report/:rptId', canActivate: [fromGuards.ReportGuard, fromGuards.ReportExistGuard], component: ReportComponent },
+            { path: '', redirectTo: 'report-list', pathMatch: 'full' }
+
+        ]
+    }
+
+    //{ path: '', component: MemberComponent },    
 ];
 
 @NgModule({

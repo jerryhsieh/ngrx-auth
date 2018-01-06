@@ -17,7 +17,10 @@ import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { PageNotFoundComponent } from './not-found.component';
 
-import { AuthGuard } from './services/auth.guard';
+
+// all guards
+import * as fromGuards from './guards';
+
 import { UserService } from './users/service/user.service';
 import { ShareModule } from './share.module';
 import { AppConfig } from './app.config';
@@ -32,7 +35,7 @@ import * as store from './store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
-
+import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 
 export function startupServiceFactory(startupService: StartupService): Function { return () => startupService.load(); }
 
@@ -59,7 +62,8 @@ export function jwtOptionsFactory() {
         HttpClientModule,
         ShareModule,
         StoreModule.forRoot(store.reducers),
-        EffectsModule.forRoot([store.UserEffects, store.ReportEffects]),
+        EffectsModule.forRoot(store.effects),
+        !environment.production ? StoreRouterConnectingModule : [],
         !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
         JwtModule.forRoot({
             jwtOptionsProvider: {
@@ -70,7 +74,7 @@ export function jwtOptionsFactory() {
 
     ],
     providers: [
-        AuthGuard,
+        ...fromGuards.guards,
         UserService,
         UtilsService,
         AppConfig,
@@ -80,7 +84,8 @@ export function jwtOptionsFactory() {
             useFactory: startupServiceFactory,
             deps: [StartupService, Injector],
             multi: true
-        }
+        },
+        { provide: RouterStateSerializer, useClass: store.CustomeSerializer }
     ],
     bootstrap: [AppComponent]
 })

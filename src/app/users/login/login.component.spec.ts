@@ -36,7 +36,7 @@ class MockStore {
     }
     public select(obj) {
         console.log('selecting from the mock store!');
-        return Observable.of([report])
+        return Observable.of(true);
     }
 }
 

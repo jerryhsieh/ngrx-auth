@@ -12,12 +12,9 @@ import { Effect, Actions } from '@ngrx/effects';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/take';
-import { defer } from 'rxjs/observable/defer';
 import { of } from 'rxjs/observable/of';
+import { map } from 'rxjs/operators/map';
+import { catchError } from 'rxjs/operators/catchError';
 
 import * as actions from '../actions';
 import { ReportService } from '../../member/service/report.service';
@@ -33,16 +30,17 @@ export class ReportEffects {
     @Effect()
     getReportEffect$: Observable<Action> = this.action$.ofType(actions.GETREPORT)
         .switchMap(() => {
-            return this.reportService.getReportsFromServer()
-                .map((res: Response) => {
+            return this.reportService.getReportsFromServer().pipe(
+                map((res: Response) => {
                     if (res.success) {
                         return new actions.getReportSuccessAction(res.payload);
                     } else {
                         return new actions.getReportFailAction(res.payload);
                     }
-                })
-                .catch(err => of(new actions.getUserFailAction(err)));
+                }),
+                catchError(err => of(new actions.getReportFailAction(err))),
+            )
 
-        })
+        });
 
 }

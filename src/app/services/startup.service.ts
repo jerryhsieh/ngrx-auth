@@ -14,6 +14,8 @@ import { UtilsService } from '../helper/utils.service';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../store';
 
+import { filter } from 'rxjs/operators/filter';
+
 @Injectable()
 export class StartupService {
 
@@ -29,7 +31,9 @@ export class StartupService {
             if (!this.utils.isTokenExpired()) {                     // token not expired
                 this.store.dispatch(new fromRoot.getUserAction());
                 return this.store.select(fromRoot.getIsLogin)
-                    .filter(status => status)
+                    .pipe(
+                    filter(status => status),
+                )
                     .subscribe(res => {
                         if (res) {
                             setInterval(() => {
@@ -68,7 +72,8 @@ export class StartupService {
             this.store.dispatch(new fromRoot.LogoutAction());
             //this.userService.logout();
             const router = this.injector.get(Router);
-            router.navigate(['/']);                     // route back to home page            
+            //router.navigate(['/']);                     // route back to home page
+            this.store.dispatch(new fromRoot.Go({ path: ['/'] }));
             console.log('logout due to token expired');
         }
     }

@@ -12,25 +12,35 @@ import * as actions from '../actions';
 import { Report } from '../../models';
 
 
-export interface State {
+export interface ReportState {
     reports: Report[];
+    loaded: boolean;
+    loading: boolean;
 }
 
-const initialState: State = {
+const initialState: ReportState = {
     reports: [],
+    loaded: false,
+    loading: false
 }
 
-export function reducer(state: State = initialState, action: actions.ReportActions): State {
+export function reducer(state: ReportState = initialState, action: actions.ReportActions): ReportState {
     switch (action.type) {
         case actions.RESET_REPORT:
             return initialState;
+        case actions.GETREPORT:
+            return { ...state, loaded: false, loading: true };
         case actions.GETREPORT_SUCCESS:
-            return Object.assign({}, state, { reports: action.payload });
+            return { ...state, reports: action.payload, loaded: true, loading: false };
+        case actions.GETREPORT_FAIL:
+            return { ...state, loaded: false, loading: false };
         default:
             return state;
     }
 }
 
 // for selector
-export const getReports = (state: State) => state.reports;
+export const getReports = (state: ReportState) => state.reports;
+export const getReportsLoaded = (state: ReportState) => state.loaded;
+export const getReportsLoading = (state: ReportState) => state.loading;
 
