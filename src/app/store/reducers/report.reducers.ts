@@ -18,7 +18,7 @@ export interface ReportState {
     loading: boolean;
 }
 
-const initialState: ReportState = {
+export const initialState: ReportState = {
     reports: [],
     loaded: false,
     loading: false

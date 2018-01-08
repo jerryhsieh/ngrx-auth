@@ -10,12 +10,10 @@ import { CommonModule } from '@angular/common';
 import { ShareModule } from '../share.module';
 
 import { MemberRoutingModule } from './member-routing.module';
-import { MemberComponent } from './member/member.component';
 
-//import { ReportService } from './service/report.service';
 import { ReportComponent } from './report/report.component';
 import { ReportListComponent } from './report-list/report-list.component';
-import { ReportSelectService } from './service/report-select.service';
+//import { ReportSelectService } from './service/report-select.service';
 
 @NgModule({
     imports: [
@@ -23,7 +21,7 @@ import { ReportSelectService } from './service/report-select.service';
         MemberRoutingModule,
         ShareModule
     ],
-    declarations: [MemberComponent, ReportComponent, ReportListComponent],
-    providers: [ReportSelectService]
+    declarations: [ReportComponent, ReportListComponent],
+    providers: []
 })
 export class MemberModule { }

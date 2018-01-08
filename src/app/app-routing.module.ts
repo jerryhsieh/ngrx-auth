@@ -6,7 +6,7 @@
 // Copyright (C) 2017 by Jerry Hsieh. All rights reserved
 //
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './home/home.component'
 import { NavbarComponent } from './navbar/navbar.component';
 import { PageNotFoundComponent } from './not-found.component';
@@ -29,6 +29,7 @@ export const routes: Routes = [
 @NgModule({
     imports: [RouterModule.forRoot(
         routes,
+        //{ preloadingStrategy: PreloadAllModules }
         //{ enableTracing: true }
     )],
     exports: [RouterModule]

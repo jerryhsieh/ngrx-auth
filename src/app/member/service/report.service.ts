@@ -29,7 +29,7 @@ export class ReportService {
 
 
     getReportsFromServer(): Observable<Response> {
-        return this.http.get<Response>(this.appConfig.apiUrl + '/report');
+        return this.http.get<Response>(this.appConfig.apiUrl + '/reports');
     }
 
     getReports(): Observable<Report[]> {
