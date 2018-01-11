@@ -1,47 +1,50 @@
 import { TestBed, async, inject } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanLoad, Route } from '@angular/router';
 import { AuthGuard } from './auth.guard';
-import { UserService } from '../users/service/user.service';
-import { Observable } from 'rxjs/Observable';
-import { Router } from '@angular/router';
+
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
-// mocked up services
-class MockStore {
-    public dispatch(obj) {
-        console.log('dispatching from the mock store!')
-    }
-    public select(obj) {
-        console.log('selecting from the mock store!');
-        return Observable.of(true)
-    }
-}
-class UserServiceStub {
-    getLoginStatus = jasmine.createSpy('getLoginStatus')
-        .and.returnValue(Observable.of(true));
-
-    logout = jasmine.createSpy('logout')
-        .and.returnValue(true);
-}
-
-class RouterStub {
-    navigateByUrl(url: string) { return url; }
-}
 
 // start describe
 describe('AuthGuard', () => {
-
+    let mockSnapshot = jasmine.createSpyObj("RouterStateSnapshot", ['toString']);
+    let storeSpy = jasmine.createSpyObj('storeSpy', ['dispatch', 'subscribe', 'select']);
+    let router = { navigate: jasmine.createSpy("navigate") };
+    let guard: AuthGuard;
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [AuthGuard,
-                { provide: UserService, useClass: UserServiceStub },
-                { provide: Router, useClass: RouterStub },
-                { provide: Store, useClass: MockStore }
+            imports: [
+                RouterTestingModule
+            ],
+            providers: [
+                AuthGuard,
+                { provide: Store, useValue: storeSpy },
+                { provide: RouterStateSnapshot, useValue: mockSnapshot },
+                { provide: Router, useValue: router }
             ]
         });
+
+        let store = TestBed.get(Store);
+        store.select = () => of(false);       // for constructor
+        guard = TestBed.get(AuthGuard);
     });
 
-    it('should create auth guard', inject([AuthGuard], (guard: AuthGuard) => {
+    it('should create auth guard', () => {
         expect(guard).toBeTruthy();
-    }));
+    });
+
+    it('should navigate to user/login if not login ', () => {
+        let store = TestBed.get(Store);
+        store.select = () => of(false);
+
+        let test = guard.canActivate(new ActivatedRouteSnapshot(), mockSnapshot);
+        expect(test).toEqual(false);
+        expect(router.navigate).toHaveBeenCalled();
+    })
+
 });
+

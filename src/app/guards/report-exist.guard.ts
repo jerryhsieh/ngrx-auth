@@ -16,7 +16,7 @@ export class ReportExistGuard implements CanActivate {
 
     canActivate(
         route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        state: RouterStateSnapshot): Observable<boolean> {
         return this.checkStore().pipe(
             switchMap(() => {
                 const id = +route.params.rptId;
