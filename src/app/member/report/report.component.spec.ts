@@ -7,6 +7,7 @@ import { Report } from '../../models';
 import { ReportService } from '../service/report.service';
 import { ReportSelectService } from '../service/report-select.service';
 
+import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { ActivatedRouteStub } from './router-stubs';
 import { ReportComponent } from './report.component';
@@ -28,13 +29,6 @@ class ReportServiceSpy {
         .and.returnValue(Observable.of(report));
 }
 
-class ReportSelectServiceSpy {
-    select = jasmine.createSpy('select')
-        .and.returnValue(report);
-
-    selectedReport = jasmine.createSpy('selectedReport')
-        .and.returnValue(Observable.of(report));
-}
 class RouterStub {
     navigateByUrl(url: string) { return url; }
 }
@@ -43,14 +37,15 @@ class RouterStub {
 describe('ReportComponent', () => {
     let component: ReportComponent;
     let fixture: ComponentFixture<ReportComponent>;
+    let storeSpy = jasmine.createSpyObj('storeSpy', ['dispatch', 'subscribe', 'select']);
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ReportComponent],
             providers: [
                 { provide: ReportService, useClass: ReportServiceSpy },
                 { provide: ActivatedRoute, useClass: ActivatedRouteStub },
-                { provide: ReportSelectService, useClass: ReportSelectServiceSpy },
-                { provide: Router, useClass: RouterStub }
+                { provide: Router, useClass: RouterStub },
+                { provide: Store, useValue: storeSpy }
             ]
         })
             .compileComponents();

@@ -19,7 +19,7 @@ import * as fromStore from '../store';
 import { Report } from '../models';
 
 
-fdescribe('ReportGuard', () => {
+describe('ReportGuard', () => {
     let guard: ReportGuard;
     let storeSpy = jasmine.createSpyObj('storeSpy', ['dispatch', 'subscribe', 'select']);
     let mockSnapshot = jasmine.createSpyObj("RouterStateSnapshot", ['toString']);
@@ -41,7 +41,7 @@ fdescribe('ReportGuard', () => {
     }));
 
     describe('should check guard functions', () => {
-        it('should check checkStore', () => {
+        it('should check checkStore and if report loaded', () => {
             let store = TestBed.get(Store);
             const expected = cold('(a|)', { a: true });
 
@@ -58,8 +58,10 @@ fdescribe('ReportGuard', () => {
             store.select.and.returnValues('fromStore.getReportsLoaded');
             store.select = () => of(false);
 
-            expect(store.dispatch).toHaveBeenCalled();
-
+            guard.checkStore()
+                .subscribe(res => {
+                    expect(store.dispatch).toHaveBeenCalled();
+                });
         });
 
 

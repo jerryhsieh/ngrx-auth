@@ -1,3 +1,11 @@
+//
+//
+// File name : report.component.ts 
+// Created by: Jerry Hsieh @ 2018-01-11
+//
+// Copyright (C) 2018 by Jerry Hsieh. All rights reserved
+//
+
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 

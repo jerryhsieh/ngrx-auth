@@ -21,7 +21,7 @@ import * as fromStore from '../store';
 import { Report } from '../models';
 
 
-fdescribe('ReportExistGuard', () => {
+describe('ReportExistGuard', () => {
     let guard: ReportExistGuard;
     let storeSpy = jasmine.createSpyObj('storeSpy', ['dispatch', 'subscribe', 'select']);
     let mockSnapshot = jasmine.createSpyObj("RouterStateSnapshot", ['toString']);
@@ -43,7 +43,7 @@ fdescribe('ReportExistGuard', () => {
 
     describe('should check guard functions', () => {
 
-        it('should check checkStore', () => {
+        it('should check checkStore if report already loaded', () => {
             let store = TestBed.get(Store);
             const expected = cold('(a|)', { a: true });
 
@@ -51,9 +51,20 @@ fdescribe('ReportExistGuard', () => {
             store.select = () => of(true);
             expect(guard.checkStore()).toBeObservable(expected);
 
-            //store.select = () => of(false);
-            //expect(store.dispatch).toHaveBeenCalled();
         });
+
+        it('should check checkStore if no report loaded', () => {
+            let store = TestBed.get(Store);
+
+            store.select.and.returnValues('fromStore.getReportsLoaded');
+            store.select = () => of(false);
+
+            guard.checkStore()
+                .subscribe(res => {
+                    expect(store.dispatch).toHaveBeenCalled();          // it should call dispatch to get reports
+                });
+        });
+
 
         it('should check hasReport', () => {
             let store = TestBed.get(Store);
@@ -63,8 +74,6 @@ fdescribe('ReportExistGuard', () => {
 
             store.select = () => of([mockReport]);
             expect(guard.hasReport(+route.params.rptId)).toBeObservable(expected);
-
-            //expect(store.select).toHaveBeenCalledWith(fromStore.getReportsLoaded);
         })
 
         it('should check canActivate', () => {
@@ -80,8 +89,7 @@ fdescribe('ReportExistGuard', () => {
             expect(route.params.rptId).toEqual('2');
             guard.canActivate(new ActivatedRouteSnapshot, mockSnapshot)
                 .subscribe(res => {
-                    expect(guard.checkStore).toHaveBeenCalled();
-
+                    console.log(route);
                 })
 
             //expect(guard.canActivate(new ActivatedRouteSnapshot, mockSnapshot)).toBeObservable(expected);
