@@ -8,11 +8,8 @@
 
 
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Report } from '../../models';
-import { ReportSelectService } from '../service/report-select.service';
-
 import { Store } from '@ngrx/store';
 import * as fromStore from '../../store';
 import { Observable } from 'rxjs/Observable';
@@ -29,8 +26,6 @@ export class ReportListComponent implements OnInit {
     loading$: Observable<boolean>;
     constructor(
         private store: Store<fromStore.State>,
-        //private router: Router,
-        //private reportSelectService: ReportSelectService
     ) { }
 
     ngOnInit() {
@@ -38,8 +33,6 @@ export class ReportListComponent implements OnInit {
         this.loading$ = this.store.select(fromStore.getReportsLoading);
     }
     onClick(report: Report) {
-        //this.reportSelectService.select(report);
-        //this.router.navigate(['/member/report', report.id]);
         this.store.dispatch(new fromStore.Go({ path: ['/member/report', report.id] }));
     }
 }

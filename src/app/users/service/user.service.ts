@@ -11,7 +11,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import { of } from 'rxjs/observable/of';
 
@@ -21,9 +20,6 @@ import { User, Response } from '../../models';
 
 @Injectable()
 export class UserService {
-    loginStatus$ = new BehaviorSubject(false);
-    currentUser$ = new BehaviorSubject(null);
-
     constructor(
         private http: HttpClient,
         private appConfig: AppConfig,
@@ -51,70 +47,4 @@ export class UserService {
         }
     }
 
-    login(loginData): Observable<boolean> {
-        return this.loginToServer(loginData)
-            .map((res: Response) => {
-                if (res.success) {
-                    this.loginStatus$.next(true);
-                    if (loginData.rememberMe) {
-                        this.utils.writeToken(TOKEN, res.payload);
-                    }
-                    this.currentUser$.next(loginData.username);          // initial current user
-                    return true;
-                } else {
-                    console.log('can not login');
-                    return false;
-                }
-            },
-            (err: HttpErrorResponse) => {
-                if (err.error instanceof Error) {
-                    console.log('client-side error');
-                } else {
-                    console.log('server-side error');
-                }
-                return of(false);
-            })
-    }
-
-    getUser() {
-        this.getUserFromServer()
-            .subscribe(res => {
-                this.currentUser$.next(res);
-            },
-            (err: HttpErrorResponse) => {
-                if (err.error instanceof Error) {
-                    console.log('client-side error');
-                } else {
-                    console.log('server-side error');
-                }
-            })
-    }
-
-    logout() {
-        this.loginStatus$.next(false);
-        this.currentUser$.next(null);
-        this.utils.removeToken(TOKEN);
-    }
-
-    getLoginStatus(): Observable<boolean> {
-        return this.loginStatus$;
-    }
-
-    getCurrentUser(): Observable<string> {
-        return this.currentUser$;
-    }
-
-
-    // when startup
-    checkUser(): Observable<boolean> {
-        if (!this.utils.isTokenExpired(TOKEN)) {
-            this.loginStatus$.next(true);
-            this.getUser();
-            return of(true);
-        } else {
-            console.log('no token or token is expired');
-            this.utils.removeToken(TOKEN);
-            return of(false);
-        }
-    }
 }

@@ -5,13 +5,8 @@
 //
 // Copyright (C) 2017 by Jerry Hsieh. All rights reserved
 //
-
-
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-
 import { Observable } from 'rxjs/Observable';
-//import { UserService } from '../users/service/user.service';
 
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../store';
@@ -26,21 +21,17 @@ export class NavbarComponent implements OnInit {
     login$: Observable<boolean>;
     user$: Observable<string>;
     constructor(
-        //private userService: UserService,
-        private store: Store<fromRoot.State>,
-        private router: Router) { }
+        private store: Store<fromRoot.State>
+    ) { }
 
     ngOnInit() {
-        //this.login$ = this.userService.getLoginStatus();
-        //this.user$ = this.userService.getCurrentUser();
         this.login$ = this.store.select(fromRoot.getIsLogin);
         this.user$ = this.store.select(fromRoot.getCurrentUser);
     }
 
     logout() {
-        //this.userService.logout();
         this.store.dispatch(new fromRoot.LogoutAction());
         this.store.dispatch(new fromRoot.resetReportAction());
-        this.router.navigate(['/']);
+        this.store.dispatch(new fromRoot.Go({ path: ['/'] }));
     }
 }
