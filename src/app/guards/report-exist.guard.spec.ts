@@ -76,6 +76,7 @@ describe('ReportExistGuard', () => {
             expect(guard.hasReport(+route.params.rptId)).toBeObservable(expected);
         })
 
+        // yet to be done
         it('should check canActivate', () => {
             let store = TestBed.get(Store);
             let route = TestBed.get(ActivatedRouteSnapshot);
@@ -87,11 +88,8 @@ describe('ReportExistGuard', () => {
             store.select = () => of([mockReport]);
 
             expect(route.params.rptId).toEqual('2');
-            guard.canActivate(new ActivatedRouteSnapshot, mockSnapshot)
-                .subscribe(res => {
-                    console.log(route);
-                })
-
+            //spyOn(guard, 'checkStore').and.returnValue(of(true));
+            //guard.canActivate(new ActivatedRouteSnapshot, mockSnapshot)
             //expect(guard.canActivate(new ActivatedRouteSnapshot, mockSnapshot)).toBeObservable(expected);
         })
 
