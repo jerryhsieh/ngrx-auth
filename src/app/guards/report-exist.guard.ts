@@ -1,3 +1,11 @@
+//
+//
+// File name : report-exist.guard.ts 
+// Created by: Jerry Hsieh @ 2018-01-11
+//
+// Copyright (C) 2018 by Jerry Hsieh. All rights reserved
+//
+
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 

@@ -1,3 +1,10 @@
+//
+//
+// File name : auth.guard.spec.ts 
+// Created by: Jerry Hsieh @ 2018-01-11
+//
+// Copyright (C) 2018 by Jerry Hsieh. All rights reserved
+//
 import { TestBed, async, inject } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -43,7 +50,8 @@ describe('AuthGuard', () => {
 
         let test = guard.canActivate(new ActivatedRouteSnapshot(), mockSnapshot);
         expect(test).toEqual(false);
-        expect(router.navigate).toHaveBeenCalled();
+        //expect(router.navigate).toHaveBeenCalled();
+        expect(store.dispatch).toHaveBeenCalled();            // navigate to /users/login
     })
 
 });
