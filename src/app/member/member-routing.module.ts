@@ -13,7 +13,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportComponent } from './report/report.component';
 import { ReportListComponent } from './report-list/report-list.component';
 
-
 import * as fromGuards from '../guards';
 
 const routes: Routes = [

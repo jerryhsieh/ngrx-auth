@@ -1,3 +1,11 @@
+//
+//
+// File name : router.reducers.ts 
+// Created by: Jerry Hsieh @ 2018-01-12
+//
+// Copyright (C) 2018 by Jerry Hsieh. All rights reserved
+//
+
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Params } from '@angular/router';
 
 import { ActionReducerMap, createFeatureSelector, Action } from '@ngrx/store';
@@ -9,12 +17,6 @@ export interface RouterStateUrl {
     queryParams: Params;
     params: Params;
 };
-
-/*
-export interface RouterState {
-    routerReducer: RouterReducerState<RouterStateUrl>
-}
-*/
 
 export type RouterState = RouterReducerState<RouterStateUrl>;
 

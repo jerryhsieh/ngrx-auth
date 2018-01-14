@@ -9,21 +9,30 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './home/home.component'
 import { NavbarComponent } from './navbar/navbar.component';
+import { MembarComponent } from './membar/membar.component';
 import { PageNotFoundComponent } from './not-found.component';
 
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+    { path: '', pathMatch: 'full', redirectTo: '/home' },
     {
-        path: '', children: [
+        path: '',
+        component: NavbarComponent,
+        children: [
             { path: 'users', loadChildren: './users/users.module#UsersModule' },         // lazy loading
-            { path: 'member', loadChildren: './member/member.module#MemberModule', canLoad: [AuthGuard] },     // lazy loading
             { path: 'home', component: HomeComponent },
-            { path: '', component: NavbarComponent, outlet: 'navbar' },
-            { path: '', pathMatch: 'full', redirectTo: '/home' },
-            { path: '**', component: PageNotFoundComponent }
         ]
-    }
+    },
+    {
+        path: '',
+        component: MembarComponent,
+        children: [
+            { path: 'member', loadChildren: './member/member.module#MemberModule', canLoad: [AuthGuard] },     // lazy loading
+
+        ]
+    },
+    { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

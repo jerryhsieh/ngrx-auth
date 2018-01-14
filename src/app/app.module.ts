@@ -16,7 +16,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { PageNotFoundComponent } from './not-found.component';
-
+import { MembarComponent } from './membar/membar.component';
 
 // all guards
 import * as fromGuards from './guards';
@@ -53,7 +53,8 @@ export function jwtOptionsFactory() {
         AppComponent,
         HomeComponent,
         NavbarComponent,
-        PageNotFoundComponent
+        PageNotFoundComponent,
+        MembarComponent
     ],
     imports: [
         BrowserModule,
