@@ -19,7 +19,7 @@ export interface ReportState {
 }
 
 export const initialState: ReportState = {
-    reports: [],
+    reports: <Report[]>[],
     loaded: false,
     loading: false
 }

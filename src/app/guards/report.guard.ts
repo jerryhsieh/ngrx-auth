@@ -47,7 +47,7 @@ export class ReportGuard implements CanActivate, CanActivateChild {
                     this.store.dispatch(new fromStore.getReportAction());
                 }
             }),
-            filter(loaded => loaded),
+            filter(loaded => !!loaded),
             take(1)
             );
     }
