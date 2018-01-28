@@ -37,6 +37,9 @@ import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 
+// for service worker
+import { ServiceWorkerModule } from '@angular/service-worker';
+
 export function startupServiceFactory(startupService: StartupService): Function { return () => startupService.load(); }
 
 export function jwtOptionsFactory() {
@@ -64,13 +67,16 @@ export function jwtOptionsFactory() {
         ShareModule,
         StoreModule.forRoot(store.reducers),
         EffectsModule.forRoot(store.effects),
-        !environment.production ? StoreRouterConnectingModule : [],
+        StoreRouterConnectingModule,
         !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
         JwtModule.forRoot({
             jwtOptionsProvider: {
                 provide: JWT_OPTIONS,
                 useFactory: jwtOptionsFactory
             }
+        }),
+        ServiceWorkerModule.register('/ngsw-worker.js', {
+            enabled: environment.production
         })
 
     ],
