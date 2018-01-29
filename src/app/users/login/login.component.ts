@@ -38,7 +38,6 @@ export class LoginComponent implements OnInit {
     get rememberMe() { return this.form.get('rememberMe') }
 
     login() {
-        console.log(this.form.value);
         this.store.dispatch(new fromRoot.LoginAction(this.form.value));
         this.store.select(fromRoot.getIsLogin)
             .subscribe(res => {

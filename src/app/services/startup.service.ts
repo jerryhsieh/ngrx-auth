@@ -13,15 +13,21 @@ import * as fromRoot from '../store';
 
 import { filter } from 'rxjs/operators/filter';
 
+// for service worker
+import { SwUpdate } from '@angular/service-worker';
+//import { MatSnackBar } from '@angular/material';
+
 @Injectable()
 export class StartupService {
 
     constructor(
         private utils: UtilsService,
-        private store: Store<fromRoot.State>
+        private store: Store<fromRoot.State>,
+        private swUPdate: SwUpdate,
     ) { }
 
     load(): Promise<any> {
+        this.checkUpdate();         // subscribe update for service worker
         return new Promise((resolve, reject) => {
             if (!this.utils.isTokenExpired()) {                     // token not expired
                 this.store.dispatch(new fromRoot.getUserAction());
@@ -53,6 +59,17 @@ export class StartupService {
             this.store.dispatch(new fromRoot.Go({ path: ['/'] }));
             console.log('logout due to token expired');
         }
+    }
+
+
+    checkUpdate() {
+        //const snackBar = this.injector.get('MatSnackBar');
+        this.swUPdate.available.subscribe(event => {
+            //let snackBarRef = snackBar.open('有新的版本', '重新下載');
+            //snackBarRef.onAction().subscribe(() => {
+            window.location.reload();
+            //})
+        })
     }
 
 }
