@@ -16,6 +16,7 @@ export interface RouterStateUrl {
     url: string;
     queryParams: Params;
     params: Params;
+    fragment: string;
 };
 
 export type RouterState = RouterReducerState<RouterStateUrl>;
@@ -27,7 +28,7 @@ export const getRouterState = createFeatureSelector<RouterReducerState<RouterSta
 export class CustomeSerializer implements RouterStateSerializer<RouterStateUrl>{
     serialize(routerState: RouterStateSnapshot): RouterStateUrl {
         const { url } = routerState;
-        const { queryParams } = routerState.root;
+        const { queryParams, fragment } = routerState.root;
 
         let state: ActivatedRouteSnapshot = routerState.root;
 
@@ -36,6 +37,6 @@ export class CustomeSerializer implements RouterStateSerializer<RouterStateUrl>{
 
         }
         const { params } = state;
-        return { url, queryParams, params };
+        return { url, queryParams, params, fragment };
     }
 }
