@@ -1,10 +1,12 @@
+
 .bg {
-  height: 400px;
-  background: url(https://images.pexels.com/photos/731658/pexels-photo-731658.jpeg?w=940&h=650&auto=compress&cs=tinysrgb) no-repeat center bottom;
-  background-position: cover;
-  background-size: cover;
-  position: relative;
-  overflow: hidden;
+    width: 100%;
+    height: 400px;
+    background: url(https://images.pexels.com/photos/731658/pexels-photo-731658.jpeg?w=940&h=650&auto=compress&cs=tinysrgb) no-repeat center bottom;
+    background-position: cover;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
 }
  
 .bg::before {

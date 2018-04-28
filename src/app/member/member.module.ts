@@ -14,7 +14,7 @@ import { MemberRoutingModule } from './member-routing.module';
 import { ReportComponent } from './report/report.component';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ViewportComponent } from './viewport/viewport.component';
-//import { ReportSelectService } from './service/report-select.service';
+
 
 @NgModule({
     imports: [

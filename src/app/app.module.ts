@@ -39,6 +39,7 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router
 
 // for service worker
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { MousewheelDirective } from './services/mousewheel.directive';
 
 export function startupServiceFactory(startupService: StartupService): Function { return () => startupService.load(); }
 
@@ -57,7 +58,8 @@ export function jwtOptionsFactory() {
         HomeComponent,
         NavbarComponent,
         PageNotFoundComponent,
-        MembarComponent
+        MembarComponent,
+        MousewheelDirective
     ],
     imports: [
         BrowserModule,

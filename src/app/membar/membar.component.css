@@ -1,3 +1,14 @@
+.sticky {
+  width: 100%;
+  color: white;
+  position: fixed;
+  top: 0;
+  z-index: 999;
+}
+
+
 .to-right {
   flex: 1 1 auto;
 }
+
+

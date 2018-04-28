@@ -13,6 +13,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportComponent } from './report/report.component';
 import { ReportListComponent } from './report-list/report-list.component';
 
+import { ViewportComponent } from './viewport/viewport.component';
 import * as fromGuards from '../guards';
 
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
         children: [
             { path: 'report-list', component: ReportListComponent },
             { path: 'report/:rptId', canActivate: [fromGuards.ReportExistGuard], component: ReportComponent },
+            { path: 'viewport', component: ViewportComponent },
             { path: '', redirectTo: 'report-list', pathMatch: 'full' },
         ]
     }

@@ -6,43 +6,102 @@
 // Copyright (C) 2018 by Jerry Hsieh. All rights reserved
 //
 
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 
-import throttle from 'lodash/throttle';
-import get from 'lodash/get';
 
-const _ = { get, throttle };
-const wheelThreshold = 0
-const onWheelThrottleWaitTime = 1600
-const pageChangeThrottleWaitTime = 900
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { throttleTime } from 'rxjs/operators';
 
+import * as $ from 'jquery';
+
+
+const wheelThreshold = 0;
+const onWheelThrottleWaitTime = 1600;
+const pageChangeThrottleWaitTime = 900;
+
+interface Slide {
+    id: number;
+    slide: string;
+    image: string;
+    state: string;
+}
 
 @Component({
     selector: 'app-viewport',
     templateUrl: './viewport.component.html',
-    styleUrls: ['./viewport.component.css']
+    styleUrls: ['./viewport.component.css'],
+    animations: [
+        trigger('drop', [
+            state('hide', style({ top: '20%' })),
+            state('show', style({ top: '50%' })),
+            transition('hide=>show', [
+                animate('1s')
+            ]),
+            transition('show=>hide', [
+                animate('1s')
+            ])
+        ]),
+    ]
 })
 
-export class ViewportComponent implements OnInit, AfterViewInit {
+export class ViewportComponent implements OnInit, OnDestroy {
     currentIndex: number = 0;
-    nOfIndex = 10;
+    keySub: Subscription;
+    mouseSub: Subscription;
+    Slides: Slide[] = [];
 
-    constructor() { }
-    ngOnInit() { }
+    constructor(
+        private route: ActivatedRoute
+    ) { }
+
+    ngOnInit() {
+        this.getSlides();
+        this.keySub = fromEvent(document, 'keydown')
+            .subscribe(e => {
+                this.onKeyDown(e);
+            });
+        this.mouseSub = fromEvent(document, 'mousewheel').pipe(throttleTime(onWheelThrottleWaitTime))
+            .subscribe(e => {
+                this.onWheel(e);
+            });
+    }
+
+    ngOnDestroy() {
+        this.keySub.unsubscribe();
+        this.mouseSub.unsubscribe();
+    }
 
     ngAfterViewInit() {
         this._jumpToPageViaHash();
     }
-    _jumpToPageViaHash() {
-        const { hash } = _.get(window, 'location')
-        if (hash) {
-            const targetIndex = parseInt(hash.substring(1), 10)
-            if (targetIndex >= 0 && targetIndex < this.nOfIndex) {
-                this.currentIndex = targetIndex;
-            }
-        }
+
+    getSlides() {
+        this.Slides.push({ id: 0, slide: 'slide0', state: 'show', image: 'https://i.imgur.com/lnfiCvk.jpg' });
+        this.Slides.push({ id: 1, slide: 'slide1', state: 'hide', image: 'https://i.imgur.com/SBedSdj.jpg' });
+        this.Slides.push({ id: 2, slide: 'slide2', state: 'hide', image: 'https://i.imgur.com/EzsqWaB.jpg' });
+        this.Slides.push({ id: 3, slide: 'slide3', state: 'hide', image: 'https://i.imgur.com/oiYeyoS.jpg' });
     }
-    onKeyDown = (e) => {
+
+    _jumpToPageViaHash() {
+        this.route.fragment.subscribe(r => {
+            console.log('got fragement ', r);
+            if (r) {
+                const targetIndex = parseInt(r, 10)
+                if (targetIndex >= 0 && targetIndex < this.Slides.length) {
+                    this.changeIndex(targetIndex);
+                }
+            } else {
+                this.changeIndex(0);
+            }
+        })
+
+    }
+    onKeyDown(e) {
         switch (e.key) {
             case 'PageDown':
             case 'Down':
@@ -51,55 +110,65 @@ export class ViewportComponent implements OnInit, AfterViewInit {
             case 'ArrowRight':
             case 'Right':
             case 'ArrowDown':
-            case 'Spacebar':
-                e.preventDefault()
-                return this.changeIndex(this.currentIndex + 1)
+            case 'Spacebar': {
+                e.preventDefault();
+                return this.goToNextIndex();
+            }
             case 'ArrowUp':
             case 'Up':
             case 'ArrowLeft':
             case 'Left':
-            case 'PageUp':
-                e.preventDefault()
-                return this.changeIndex(this.currentIndex - 1)
+            case 'PageUp': {
+                e.preventDefault();
+                this.goToPrevIndex();
+            }
             default:
                 return null
         }
     }
-    /*
-    When a user swipes on laptop touchpad with two fingers once,
-    it will cause lots of wheeling events during about 1.6s.
-    So we need to throttle it.
-  */
-    onWheel = throttle((e) => {
+
+    onWheel(e) {
         if (Math.abs(e.deltaY) > wheelThreshold) {
             if (e.deltaY > 0) {
-                return this.changeIndex(this.currentIndex + 1)
+                return this.goToNextIndex();
             }
             if (e.deltaY < 0) {
-                return this.changeIndex(this.currentIndex - 1)
+                return this.goToPrevIndex();
             }
         }
-    }, onWheelThrottleWaitTime, { leading: true, trailing: false })
+    }
 
     _isIndexValueValid(index) {
-
-        return (index >= 0 && index < this.nOfIndex)
+        return (index >= 0 && index < this.Slides.length)
     }
 
-    changeIndex = _.throttle((targetIndex) => {
+    changeIndex(targetIndex) {
         if (this._isIndexValueValid(targetIndex)) {
             if (targetIndex !== this.currentIndex) {
+                const preIndex = this.currentIndex;
                 this.currentIndex = targetIndex;
+                const nslide = document.getElementById('slide' + this.currentIndex);
+                if (nslide) {
+                    $('html, body').animate({
+                        scrollTop: nslide.offsetTop - 64
+                    }, pageChangeThrottleWaitTime, () => {
+                        this.Slides[this.currentIndex].state = "show";
+                        this.Slides[preIndex].state = 'hide';
+                        console.log('after scroll');
+                    })
+                } else {
+                    window.scrollTo(0, 0);
+                }
             }
         }
-    }, pageChangeThrottleWaitTime, { leading: true, trailing: false })
-
-    goToNextIndex = () => {
-        return this.changeIndex(this.currentIndex + 1)
     }
 
-    goToPrevIndex = () => {
-        return this.changeIndex(this.currentIndex - 1)
+    goToNextIndex() {
+        return this.changeIndex(this.currentIndex + 1);
+    }
+
+    goToPrevIndex() {
+        return this.changeIndex(this.currentIndex - 1);
     }
 
 }

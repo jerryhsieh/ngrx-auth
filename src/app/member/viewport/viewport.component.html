@@ -1,3 +1,6 @@
-<p>
-  viewport works!
-</p>
+
+<div class="container">
+  <div class="slide" *ngFor="let slide of Slides" [id]="slide.slide" [style.backgroundImage]=" 'url(' + slide.image + ')' "  >
+    <h2 class="text" [@drop]="slide.state">Welcome to Here</h2>
+  </div>
+</div>
